@@ -6,6 +6,15 @@
 
 Wrap [sonata-project/exporter](https://github.com/sonata-project/exporter), make it easy and strong~
 
+## Feature
+
+- Simple api (use `DataExporter::csv()->saveAs()`)
+- Quick change for different output type (csv/xlsx/xls/ods...)
+- Support a lot of source, and can use array or iterator quickly 
+- low memory usage with huge data write (use csv/xlsxSpout)
+- low memory usage with chunk data fetch and write by chain (use GeneratorChainSourceIterator)
+- support `saveAs()` and `browserDownload()`
+
 ## Installation
 
 You can install the package via composer:
