@@ -16,13 +16,16 @@
     ],
     "require": {
         "php": "^7.3|^8.0",
-        "sonata-project/exporter": "^2.10"
+        "sonata-project/exporter": "^2.10",
+        "illuminate/container": "^5|^6|^7|^8",
+        "illuminate/support": "^5|^6|^7|^8",
+        "symfony/http-foundation": "^3|^4|^5"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
+        "kriss/spout": "v3.3.0.1",
         "pestphp/pest": "^1.20",
-        "phpoffice/phpspreadsheet": "^1.21",
-        "kriss/spout": "v3.3.0.1"
+        "phpoffice/phpspreadsheet": "^1.21"
     },
     "suggest": {
         "phpoffice/phpspreadsheet": "export xlsx",
@@ -30,12 +33,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Kriss\\DataExport\\": "src"
+            "Kriss\\DataExporter\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Kriss\\DataExport\\Tests\\": "tests"
+            "Kriss\\DataExporter\\Tests\\": "tests"
         }
     },
     "scripts": {
