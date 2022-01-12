@@ -29,7 +29,7 @@ class DataExporter
 
     public static function __callStatic($name, $arguments)
     {
-        if (!static::$container instanceof ContainerContract) {
+        if (! static::$container instanceof ContainerContract) {
             static::$container = static::getContainer();
         }
 

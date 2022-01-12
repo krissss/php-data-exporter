@@ -13,4 +13,3 @@ it('DataExporter saveAs result correct', function () {
 
     expect($savePath)->toBe(__DIR__ . '/../tmp/test.xlsx');
 });
-

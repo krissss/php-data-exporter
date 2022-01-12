@@ -51,7 +51,7 @@ class Builder
         if (is_array($source)) {
             $source = new ArraySourceIterator($source);
         }
-        if (!$source instanceof Iterator) {
+        if (! $source instanceof Iterator) {
             throw new InvalidArgumentException('Not support $source.');
         }
 
