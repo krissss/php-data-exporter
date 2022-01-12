@@ -19,6 +19,7 @@ it('Clean file if exception', function () {
             },
         ]);
     $filename = $builder->makeFilename(__DIR__ . '/../tmp/test');
+
     try {
         $builder->saveAs(__DIR__ . '/../tmp/test');
     } catch (Throwable $e) {
