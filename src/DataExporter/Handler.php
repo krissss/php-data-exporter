@@ -84,10 +84,11 @@ class Handler
         });
 
         if ($downloadName) {
+            $name = basename($this->makeFilename($downloadName));
             $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
                 ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-                $downloadName,
-                Str::ascii($downloadName)
+                $name,
+                Str::ascii($name)
             ));
         }
 
