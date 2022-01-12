@@ -1,35 +1,41 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "kriss/data-export",
+    "description": "Data Export For PHP",
     "keywords": [
-        ":vendor_name",
-        ":package_slug"
+        "kriss",
+        "data-export"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/krissss/php-data-export",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "kriss",
+            "email": "462679766@qq.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.0"
+        "php": "^7.3|^8.0",
+        "sonata-project/exporter": "^2.10"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
         "pestphp/pest": "^1.20",
-        "spatie/ray": "^1.28"
+        "phpoffice/phpspreadsheet": "^1.21",
+        "kriss/spout": "v3.3.0.1"
+    },
+    "suggest": {
+        "phpoffice/phpspreadsheet": "export xlsx",
+        "box/spout": "export xlsxSpout"
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src"
+            "Kriss\\DataExport\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Kriss\\DataExport\\Tests\\": "tests"
         }
     },
     "scripts": {
