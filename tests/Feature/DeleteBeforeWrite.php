@@ -19,9 +19,10 @@ class MyDataExport extends \Kriss\DataExporter\DataExporter
 
 it('Dont delete file if exist', function () {
     $filename = __DIR__ . '/../tmp/test.csv';
-    if (!file_exists($filename)) {
+    if (! file_exists($filename)) {
         file_put_contents($filename, 'test');
     }
+
     try {
         MyDataExport::csv([['a']])->saveAs($filename);
     } catch (FileAlreadyExistException $e) {

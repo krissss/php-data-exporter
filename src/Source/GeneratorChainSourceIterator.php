@@ -12,7 +12,7 @@ class GeneratorChainSourceIterator implements \Iterator
     public function __construct(\Closure $generator)
     {
         $this->generator = call_user_func($generator);
-        if (!$this->generator instanceof \Generator) {
+        if (! $this->generator instanceof \Generator) {
             throw new \InvalidArgumentException('$generator must return \Generator');
         }
     }
