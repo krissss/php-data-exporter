@@ -16,9 +16,41 @@ composer require kriss/data-export
 
 ## Usage
 
+### simple Example
+
 ```php
-// TODO
+use \Kriss\DataExporter\DataExporter;
+
+$source = [
+    ['aaa', 'bbb', 'ccc'],
+    ['aaa', 'bbb', 'ccc'],
+    ['aaa', 'bbb', 'ccc'],
+];
+DataExporter::csv($source, ['showHeaders' => false])->saveAs();
 ```
+
+### Support Source
+
+- all source defined in [sonata-project/exporter](https://docs.sonata-project.org/projects/exporter/en/2.x/reference/sources/)
+- GeneratorChainSourceIterator, Example in [Tests](./tests/Feature/GeneratorChainSourceIteratorTest.php)
+- yours
+
+### Support Writer
+
+All Config in `DataExporter::writerConfig()`
+
+You can extend DataExporter and add Yours, see Example in [Tests](./tests/Feature/ExtraWriter.php)
+
+## FAQ
+
+> Why [box/spout](https://github.com/box/spout) Use
+
+`box/spout` can write xlsx use stream, but `phpoffice/phpspreadsheet` not.
+`phpoffice/phpspreadsheet` use lots of memory when write huge data, but `box/spout` use few!
+
+> When use `GeneratorChainSourceIterator`
+
+When you should handle huge source and need to merge them in one write.
 
 ## Changelog
 
