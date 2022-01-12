@@ -101,7 +101,9 @@ class Handler
     {
         // 关闭 writer
         if ($this->builder) {
-            $this->builder->getWriter()->close();
+            if ($writer = $this->builder->getWriter()) {
+                $writer->close();
+            }
         }
         // 清理文件
         if ($this->filename && is_file($this->filename)) {

@@ -33,11 +33,11 @@ DataExporter::csv($source, ['showHeaders' => false])->saveAs();
 
 - all source defined in [sonata-project/exporter](https://docs.sonata-project.org/projects/exporter/en/2.x/reference/sources/)
 - GeneratorChainSourceIterator, Example in [Tests](./tests/Feature/GeneratorChainSourceIteratorTest.php)
-- yours
+- see [Tests](./tests/Feature/SourceTest.php)
 
 ### Support Writer
 
-All Config in `DataExporter::writerConfig()`
+All Config in `DataExporter::writerConfig()`, see [Tests](./tests/Feature/WriterTest.php)
 
 You can extend DataExporter and add Yours, see Example in [Tests](./tests/Feature/ExtraWriter.php)
 

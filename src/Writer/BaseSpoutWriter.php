@@ -20,7 +20,7 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
 
     public function __construct(string $filename, bool $showHeaders = true, callable $writerConfigCb = null)
     {
-        if (! class_exists('Box\Spout\Writer\WriterInterface')) {
+        if (! interface_exists('Box\Spout\Writer\WriterInterface')) {
             throw new \InvalidArgumentException('must install `box/spout` first');
         }
 

@@ -61,17 +61,17 @@ class Builder
     }
 
     /**
-     * @return WriterInterface
+     * @return WriterInterface|null
      */
-    public function getWriter(): WriterInterface
+    public function getWriter(): ?WriterInterface
     {
         return $this->writer;
     }
 
     /**
-     * @return Iterator
+     * @return Iterator|null
      */
-    public function getSource(): Iterator
+    public function getSource(): ?Iterator
     {
         return $this->source;
     }
