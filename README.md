@@ -1,8 +1,8 @@
 # Data Export For PHP
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/kriss/data-export.svg?style=flat-square)](https://packagist.org/packages/kriss/data-export)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/kriss/data-export?style=flat-square)](https://packagist.org/packages/kriss/data-export)
 [![Tests](https://github.com/krissss/php-data-exporter/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/krissss/php-data-exporter/actions/workflows/run-tests.yml)
-[![Total Downloads](https://img.shields.io/packagist/dt/kriss/data-export.svg?style=flat-square)](https://packagist.org/packages/kriss/data-export)
+[![Total Downloads](https://img.shields.io/packagist/dt/kriss/data-export?style=flat-square)](https://packagist.org/packages/kriss/data-export)
 
 Wrap [sonata-project/exporter](https://github.com/sonata-project/exporter), make it easy and strong~
 
