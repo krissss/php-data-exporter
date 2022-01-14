@@ -43,4 +43,3 @@ it("Extension Spreadsheet: set style", function () {
     // check by person
     expect(true)->toBeTrue();
 });
-

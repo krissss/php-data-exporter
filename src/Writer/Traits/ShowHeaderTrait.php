@@ -21,6 +21,7 @@ trait ShowHeaderTrait
         $strKeys = array_filter(array_keys($data), function ($key) {
             return is_string($key);
         });
+
         return count($strKeys) > 0;
     }
 }
