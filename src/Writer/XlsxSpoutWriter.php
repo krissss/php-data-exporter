@@ -4,24 +4,11 @@ namespace Kriss\DataExporter\Writer;
 
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Box\Spout\Writer\WriterInterface;
+use Kriss\DataExporter\Writer\Traits\XlsxTypedTrait;
 
 class XlsxSpoutWriter extends BaseSpoutWriter
 {
-    /**
-     * @inheritDoc
-     */
-    public function getDefaultMimeType(): string
-    {
-        return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getFormat(): string
-    {
-        return 'xlsx';
-    }
+    use XlsxTypedTrait;
 
     /**
      * @inheritDoc

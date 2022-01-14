@@ -7,7 +7,10 @@ use Illuminate\Contracts\Container\Container as ContainerContract;
 use Kriss\DataExporter\DataExporter\Handler;
 use Kriss\DataExporter\Writer\CsvSpoutWriter;
 use Kriss\DataExporter\Writer\OdsSpoutWriter;
+use Kriss\DataExporter\Writer\OdsSpreadsheetWriter;
+use Kriss\DataExporter\Writer\XlsSpreadsheetWriter;
 use Kriss\DataExporter\Writer\XlsxSpoutWriter;
+use Kriss\DataExporter\Writer\XlsxSpreadsheetWriter;
 use Sonata\Exporter\Writer\CsvWriter;
 use Sonata\Exporter\Writer\XlsWriter;
 use Sonata\Exporter\Writer\XlsxWriter;
@@ -22,6 +25,10 @@ use Sonata\Exporter\Writer\XlsxWriter;
  * @method static Handler csvSpout($source, array $options = [])
  * @method static Handler xlsxSpout($source, array $options = [])
  * @method static Handler odsSpout($source, array $options = [])
+ * @method static Handler csvSpreadsheet($source, array $options = [])
+ * @method static Handler xlsSpreadsheet($source, array $options = [])
+ * @method static Handler xlsxSpreadsheet($source, array $options = [])
+ * @method static Handler odsSpreadsheet($source, array $options = [])
  */
 class DataExporter
 {
@@ -98,6 +105,26 @@ class DataExporter
             ],
             'odsSpout' => [
                 'class' => OdsSpoutWriter::class,
+                'options' => [],
+                'extension' => 'ods',
+            ],
+            'csvSpreadsheet' => [
+                'class' => CsvSpoutWriter::class,
+                'options' => [],
+                'extension' => 'csv',
+            ],
+            'xlsSpreadsheet' => [
+                'class' => XlsSpreadsheetWriter::class,
+                'options' => [],
+                'extension' => 'xls',
+            ],
+            'xlsxSpreadsheet' => [
+                'class' => XlsxSpreadsheetWriter::class,
+                'options' => [],
+                'extension' => 'xlsx',
+            ],
+            'odsSpreadsheet' => [
+                'class' => OdsSpreadsheetWriter::class,
                 'options' => [],
                 'extension' => 'ods',
             ],

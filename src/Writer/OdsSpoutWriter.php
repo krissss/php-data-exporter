@@ -4,24 +4,11 @@ namespace Kriss\DataExporter\Writer;
 
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Box\Spout\Writer\WriterInterface;
+use Kriss\DataExporter\Writer\Traits\OdsTypedTrait;
 
 class OdsSpoutWriter extends BaseSpoutWriter
 {
-    /**
-     * @inheritDoc
-     */
-    public function getDefaultMimeType(): string
-    {
-        return 'application/vnd.oasis.opendocument.spreadsheet';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getFormat(): string
-    {
-        return 'ods';
-    }
+    use OdsTypedTrait;
 
     /**
      * @inheritDoc

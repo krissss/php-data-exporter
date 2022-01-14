@@ -64,7 +64,7 @@ When you should handle huge source and need to merge them in one write.
 
 > How to build style
 
-Use extension, see [ExtendSpoutTest](./tests/Feature/ExtensionSpoutTest.php)
+Use extension, see [ExtendSpoutTest](./tests/Feature/ExtensionSpoutTest.php) or [ExtendSpreadsheetTest](./tests/Feature/ExtensionSpreadsheetTest.php)
 
 ## Changelog
 

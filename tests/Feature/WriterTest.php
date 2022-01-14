@@ -47,3 +47,27 @@ it('Writer odsSpout', function () {
 
     expect($this->filename . '.ods')->toBe($filename);
 });
+
+it('Writer csvSpreadsheet', function () {
+    $filename = DataExporter::csvSpreadsheet($this->source)->saveAs($this->filename);
+
+    expect($this->filename . '.csv')->toBe($filename);
+});
+
+it('Writer xlsSpreadsheet', function () {
+    $filename = DataExporter::xlsSpreadsheet($this->source)->saveAs($this->filename);
+
+    expect($this->filename . '.xls')->toBe($filename);
+});
+
+it('Writer xlsxSpreadsheet', function () {
+    $filename = DataExporter::xlsxSpreadsheet($this->source)->saveAs($this->filename);
+
+    expect($this->filename . '.xlsx')->toBe($filename);
+});
+
+it('Writer odsSpreadsheet', function () {
+    $filename = DataExporter::odsSpreadsheet($this->source)->saveAs($this->filename);
+
+    expect($this->filename . '.ods')->toBe($filename);
+});
