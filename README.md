@@ -62,6 +62,10 @@ You can extend DataExporter and add Yours, see Example in [Tests](./tests/Featur
 
 When you should handle huge source and need to merge them in one write.
 
+> How to build style
+
+Use extension, see [ExtendSpoutTest](./tests/Feature/ExtensionSpoutTest.php)
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
