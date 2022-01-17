@@ -21,7 +21,7 @@ abstract class BaseSpreadsheetWriter implements TypedWriterInterface
      */
     protected $writer;
 
-    public function __construct(string $filename, bool $showHeaders = true, ?SpreadsheetExtendInterface $extend = null)
+    public function __construct(string $filename, ?bool $showHeaders = null, ?SpreadsheetExtendInterface $extend = null)
     {
         if (! interface_exists('PhpOffice\PhpSpreadsheet\Writer\IWriter')) {
             throw new \InvalidArgumentException('must install `phpoffice/phpspreadsheet` first');
