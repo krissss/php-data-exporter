@@ -15,6 +15,7 @@ Wrap [sonata-project/exporter](https://github.com/sonata-project/exporter), make
 - Low memory usage with chunk data fetch and write by chain (use GeneratorChainSourceIterator)
 - Support `saveAs()` and `browserDownload()`
 - Support do something in writing (use ObjectEvent)
+- Support control Spreadsheet and Spout Instance, for change style and others (use Extend)
 
 ## Installation
 
