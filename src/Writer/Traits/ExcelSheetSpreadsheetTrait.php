@@ -17,11 +17,13 @@ trait ExcelSheetSpreadsheetTrait
             if ($sheet === 0) {
                 $this->spreadsheet->setActiveSheetIndex($sheet);
                 $this->resetRow();
+
                 return;
             }
             $this->spreadsheet->createSheet($sheet);
             $this->spreadsheet->setActiveSheetIndex($sheet);
             $this->resetRow();
+
             return;
         }
         $worksheet = new Worksheet($this->spreadsheet, $sheet);

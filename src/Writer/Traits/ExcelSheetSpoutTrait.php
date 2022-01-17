@@ -16,11 +16,13 @@ trait ExcelSheetSpoutTrait
                 return;
             }
             $this->writer->addNewSheetAndMakeItCurrent();
+
             return;
         }
         if ($this->isRemovedDefaultSheet === false) {
             $this->writer->getCurrentSheet()->setName($sheet);
             $this->isRemovedDefaultSheet = true;
+
             return;
         }
         $this->writer->addNewSheetAndMakeItCurrent();
