@@ -16,6 +16,7 @@ Wrap [sonata-project/exporter](https://github.com/sonata-project/exporter), make
 - Support `saveAs()` and `browserDownload()`
 - Support do something in writing (use ObjectEvent)
 - Support control Spreadsheet and Spout Instance, for change style and others (use Extend)
+- Support Excel multi sheet write (use ExcelSheetSourceIterator) 
 
 ## Installation
 
@@ -66,6 +67,10 @@ When you should handle huge source and need to merge them in one write.
 > How to build style
 
 Use extension, see [ExtendSpoutTest](./tests/Feature/ExtensionSpoutTest.php) or [ExtendSpreadsheetTest](./tests/Feature/ExtensionSpreadsheetTest.php)
+
+> How to write multi sheet
+
+Use ExcelSheetSpreadsheetTrait, see [ExcelSheetSourceIteratorTest](./tests/Feature/ExcelSheetSourceIteratorTest.php)
 
 ## Changelog
 
