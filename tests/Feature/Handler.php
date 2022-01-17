@@ -20,3 +20,11 @@ it('Handler with browserDownload', function () {
         Str::contains($response->headers->get('Content-Disposition'), 'test.csv')
     )->toBeTrue();
 });
+
+it('Handler getFilename', function () {
+    $name = 'test';
+    $builder = DataExporter::csv([['a']]);
+    $realName = $builder->makeFilename($name);
+
+    expect($realName)->toBe('test.csv');
+});
