@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Iterator;
 use Kriss\DataExporter\Source\GeneratorChainSourceIterator;
 use Kriss\DataExporter\Traits\ObjectEventsSupportTrait;
+use Kriss\DataExporter\Writer\Interfaces\ExcelSheetSupportInterface;
 use Sonata\Exporter\Source\ArraySourceIterator;
 use Sonata\Exporter\Writer\WriterInterface;
 
@@ -85,7 +86,10 @@ class Builder
         $this->handleEvent(self::EVENT_AFTER_OPEN, $this);
 
         $index = 0;
-        foreach ($this->eachSource() as $source) {
+        foreach ($this->eachSource() as $key => $source) {
+            if ($this->writer instanceof ExcelSheetSupportInterface) {
+                $this->writer->setActiveSheet($key);
+            }
             foreach ($source as $data) {
                 $this->handleEvent(self::EVENT_BEFORE_ECHO_ROW_WRITE, $data, $index, $this);
                 $this->writer->write($data);
@@ -101,11 +105,11 @@ class Builder
     private function eachSource(): \Generator
     {
         if ($this->source instanceof GeneratorChainSourceIterator) {
-            foreach ($this->source as $source) {
-                yield $source;
+            foreach ($this->source as $key => $source) {
+                yield $key => $source;
             }
         } else {
-            yield $this->source;
+            yield 0 => $this->source;
         }
     }
 }

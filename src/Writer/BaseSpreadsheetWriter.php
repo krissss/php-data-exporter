@@ -71,8 +71,14 @@ abstract class BaseSpreadsheetWriter implements TypedWriterInterface
         $this->spreadsheet->getActiveSheet()->fromArray($data, null, 'A' . $this->row, true);
     }
 
+    protected function resetRow(): void
+    {
+        $this->row = 1;
+    }
+
     public function close()
     {
+        $this->spreadsheet->setActiveSheetIndex(0); // reset active sheet
         $writer = $this->getWriter($this->spreadsheet);
         $this->extend->beforeWrite($this->spreadsheet, $writer);
         $writer->save($this->filename);
