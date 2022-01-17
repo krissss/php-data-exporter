@@ -109,12 +109,14 @@ class Builder
             foreach ($this->source as $sheet => $source) {
                 yield $sheet => $source;
             }
+
             return;
         }
         if ($this->source instanceof GeneratorChainSourceIterator) {
             foreach ($this->source as $source) {
                 yield 0 => $source; // 固定写入到同一个 sheet
             }
+
             return;
         }
         yield 0 => $this->source;
