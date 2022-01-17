@@ -70,6 +70,11 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
         $this->row++;
     }
 
+    protected function resetRow(): void
+    {
+        $this->row = 1;
+    }
+
     protected function writeRow(array $data)
     {
         $cells = [];
