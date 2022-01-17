@@ -5,6 +5,7 @@ namespace Kriss\DataExporter\DataExporter;
 use Illuminate\Contracts\Support\Arrayable;
 use InvalidArgumentException;
 use Iterator;
+use Kriss\DataExporter\Source\ExcelSheetSourceIterator;
 use Kriss\DataExporter\Source\GeneratorChainSourceIterator;
 use Kriss\DataExporter\Traits\ObjectEventsSupportTrait;
 use Kriss\DataExporter\Writer\Interfaces\ExcelSheetSupportInterface;
@@ -104,9 +105,14 @@ class Builder
 
     private function eachSource(): \Generator
     {
+        if ($this->source instanceof ExcelSheetSourceIterator) {
+            foreach ($this->source as $sheet => $source) {
+                yield $sheet => $source;
+            }
+        }
         if ($this->source instanceof GeneratorChainSourceIterator) {
-            foreach ($this->source as $key => $source) {
-                yield $key => $source;
+            foreach ($this->source as $source) {
+                yield 0 => $source; // 固定写入到同一个 sheet
             }
         } else {
             yield 0 => $this->source;

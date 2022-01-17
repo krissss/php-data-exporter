@@ -15,9 +15,6 @@ trait ExcelSheetSpreadsheetTrait
     {
         if (is_int($sheet)) {
             if ($sheet === 0) {
-                $this->spreadsheet->setActiveSheetIndex($sheet);
-                $this->resetRow();
-
                 return;
             }
             $this->spreadsheet->createSheet($sheet);

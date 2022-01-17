@@ -2,13 +2,14 @@
 
 use Kriss\DataExporter\DataExporter;
 use Kriss\DataExporter\Source\ExcelSheetSourceIterator;
+use Kriss\DataExporter\Source\GeneratorChainSourceIterator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 beforeEach(function () {
     $this->filename = __DIR__ . '/../tmp/test';
 });
 
-it('Excel sheet', function () {
+it('Excel sheet: ExcelSheetSourceIterator', function () {
     foreach ([
                  'xlsSpreadsheet', 'xlsxSpreadsheet', 'odsSpreadsheet',
                  'xlsxSpout', 'odsSpout',
@@ -67,5 +68,36 @@ it('Excel sheet', function () {
         expect(count($factory->getAllSheets()))->toBe(2);
         $factory->setActiveSheetIndexByName('有表头');
         expect((string)$factory->getActiveSheet()->getCell('A1')->getValue())->toBe('key2');
+    }
+});
+
+it('Excel sheet: GeneratorChainSourceIterator', function () {
+    foreach ([
+                 'xlsSpreadsheet', 'xlsxSpreadsheet', 'odsSpreadsheet',
+                 'xlsxSpout', 'odsSpout',
+             ] as $fn) {
+        $source1 = new GeneratorChainSourceIterator(function () {
+            foreach ([
+                         new ArrayIterator([
+                             ['aa', 'bb1'],
+                             ['aa', 'bb2'],
+                             ['aa', 'bb3'],
+                         ]),
+                         new ArrayIterator([
+                             ['cc', 'dd4'],
+                             ['cc', 'dd5'],
+                             ['cc', 'dd6'],
+                         ]),
+                     ] as $iterator) {
+                yield $iterator;
+            }
+        });
+
+        $filename = DataExporter::$fn($source1)->saveAs($this->filename);
+        $factory = IOFactory::load($filename);
+        expect(count($factory->getAllSheets()))->toBe(1);
+        expect($factory->getActiveSheetIndex())->toBe(0);
+        expect($factory->getActiveSheet()->getHighestRow())->toBe(6);
+        expect((string)$factory->getActiveSheet()->getCell('B3')->getValue())->toBe('bb3');
     }
 });
