@@ -19,3 +19,7 @@ All notable changes to `php-data-export` will be documented in this file.
 - Add auto solve header by array
 - Support control Spreadsheet and Spout Instance, for change style and others (use Extend)
 - Support Excel multi sheet write (use ExcelSheetSourceIterator)
+
+## 1.4.0 - 2022-01-19
+
+- support nested GeneratorChainSourceIterator
