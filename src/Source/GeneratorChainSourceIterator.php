@@ -2,7 +2,9 @@
 
 namespace Kriss\DataExporter\Source;
 
-class GeneratorChainSourceIterator implements \Iterator
+use Sonata\Exporter\Source\SourceIteratorInterface;
+
+class GeneratorChainSourceIterator implements SourceIteratorInterface
 {
     /**
      * @var \Generator
