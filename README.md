@@ -17,6 +17,7 @@ Wrap [sonata-project/exporter](https://github.com/sonata-project/exporter), make
 - Support do something in writing (use ObjectEvent)
 - Support control Spreadsheet and Spout Instance, for change style and others (use Extend)
 - Support Excel multi sheet write (use ExcelSheetSourceIterator) 
+- Support Dynamic source (use CallableSourceIterator)
 
 ## Installation
 
@@ -44,8 +45,10 @@ DataExporter::csv($source, ['showHeaders' => false])->saveAs();
 ### Support Source
 
 - all source defined in [sonata-project/exporter](https://docs.sonata-project.org/projects/exporter/en/2.x/reference/sources/)
+- Simple source, Example in [Tests](./tests/Feature/SourceTest.php)
 - GeneratorChainSourceIterator, Example in [Tests](./tests/Feature/GeneratorChainSourceIteratorTest.php)
-- see [Tests](./tests/Feature/SourceTest.php)
+- ExcelSheetSourceIterator, Example in [Tests](./tests/Feature/ExcelSheetSourceIteratorTest.php)
+- CallableSourceIterator, Example in [Tests](./tests/Feature/CallableSourceIteratorTest.php)
 
 ### Support Writer
 
