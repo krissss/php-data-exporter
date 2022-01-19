@@ -129,6 +129,7 @@ class Builder
                     yield $value;
                 }
             }
+
             return;
         }
         yield $source;
