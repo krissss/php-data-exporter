@@ -21,6 +21,7 @@ class CallableSourceIterator implements SourceIteratorInterface
         if ($this->callableResult === null) {
             $this->callableResult = call_user_func($this->callable);
         }
+
         return $this->callableResult;
     }
 
