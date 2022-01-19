@@ -23,3 +23,7 @@ All notable changes to `php-data-export` will be documented in this file.
 ## 1.4.0 - 2022-01-19
 
 - support nested GeneratorChainSourceIterator
+
+## 1.5.0 - 2022-01-19
+
+- Add support CallableSourceIterator
