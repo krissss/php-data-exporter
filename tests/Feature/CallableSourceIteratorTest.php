@@ -29,6 +29,7 @@ it("CallableSourceIterator in Chain", function () {
                 $arr[] = ['x' . $i];
                 $total++;
             }
+
             return new ArraySourceIterator($arr);
         }),
         new CallableSourceIterator(function () use (&$total) {
