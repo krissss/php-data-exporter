@@ -87,9 +87,11 @@ class Builder
         $this->handleEvent(self::EVENT_AFTER_OPEN, $this);
 
         $index = 0;
-        foreach ($this->eachSource() as $key => $source) {
-            if ($this->writer instanceof ExcelSheetSupportInterface) {
+        $lastSheet = null;
+        foreach ($this->parseSource($this->source) as $key => $source) {
+            if ($this->writer instanceof ExcelSheetSupportInterface && $lastSheet !== $key) {
                 $this->writer->setActiveSheet($key);
+                $lastSheet = $key; // 相同 sheet 名不重复设置
             }
             foreach ($source as $data) {
                 $this->handleEvent(self::EVENT_BEFORE_ECHO_ROW_WRITE, $data, $index, $this);
@@ -103,22 +105,32 @@ class Builder
         $this->writer->close();
     }
 
-    private function eachSource(): \Generator
+    private function parseSource(Iterator $source): \Generator
     {
-        if ($this->source instanceof ExcelSheetSourceIterator) {
-            foreach ($this->source as $sheet => $source) {
-                yield $sheet => $source;
+        if ($source instanceof ExcelSheetSourceIterator) {
+            foreach ($source as $sheet => $deepSource) {
+                foreach ($this->loopGeneratorChainSource($deepSource) as $value) {
+                    yield $sheet => $value;
+                }
             }
 
             return;
         }
-        if ($this->source instanceof GeneratorChainSourceIterator) {
-            foreach ($this->source as $source) {
-                yield 0 => $source; // 固定写入到同一个 sheet
-            }
+        foreach ($this->loopGeneratorChainSource($source) as $value) {
+            yield 0 => $value;
+        }
+    }
 
+    private function loopGeneratorChainSource(Iterator $source): \Generator
+    {
+        if ($source instanceof GeneratorChainSourceIterator) {
+            foreach ($source as $newSource) {
+                foreach ($this->loopGeneratorChainSource($newSource) as $value) {
+                    yield $value;
+                }
+            }
             return;
         }
-        yield 0 => $this->source;
+        yield $source;
     }
 }
