@@ -27,7 +27,7 @@ class NullSpoutExtend implements SpoutExtendInterface
     /**
      * @inheritDoc
      */
-    public function afterCellCreate(int $colIndex, int $rowIndex, Cell $cell): void
+    public function afterCellCreate($colIndex, int $rowIndex, Cell $cell): void
     {
     }
 

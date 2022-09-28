@@ -19,7 +19,7 @@ interface SpoutExtendInterface
 
     /**
      * 构建单个 cell 的样式
-     * @param int $colIndex start from 0(A=0)
+     * @param int|string $colIndex 列数据的 index
      * @param int $rowIndex start from 1
      * @return Style|null
      * @link https://github.com/openspout/openspout/blob/3.x/docs/documentation.md#styling-cells
@@ -30,11 +30,11 @@ interface SpoutExtendInterface
     /**
      * cell 创建后，可以修改 cell 的样式等
      * @link https://github.com/openspout/openspout/blob/3.x/docs/documentation.md#styling-cells
-     * @param int $colIndex start from 0(A=0)
+     * @param int|string $colIndex 列数据的 index
      * @param int $rowIndex start from 1
      * @param Cell $cell
      */
-    public function afterCellCreate(int $colIndex, int $rowIndex, Cell $cell): void;
+    public function afterCellCreate($colIndex, int $rowIndex, Cell $cell): void;
 
     /**
      * 构建单个 row 的样式

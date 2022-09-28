@@ -52,7 +52,7 @@ class RowCellStyleExtend extends NullSpoutExtend
     /**
      * @inheritDoc
      */
-    public function afterCellCreate(int $colIndex, int $rowIndex, Cell $cell): void
+    public function afterCellCreate($colIndex, int $rowIndex, Cell $cell): void
     {
         if ($colIndex === 0 && $rowIndex === 2) {
             // 第一列，第二行（A2）
