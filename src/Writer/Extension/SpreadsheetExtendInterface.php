@@ -8,6 +8,7 @@ use PhpOffice\PhpSpreadsheet\Writer\IWriter;
 interface SpreadsheetExtendInterface
 {
     /**
+     * 真正写入文件前
      * @link https://phpspreadsheet.readthedocs.io/en/latest/topics/recipes/#styles
      * @param Spreadsheet $spreadsheet
      * @param IWriter $writer

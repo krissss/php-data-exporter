@@ -2,12 +2,12 @@
 
 namespace Kriss\DataExporter\Writer;
 
-use OpenSpout\Writer\Common\Creator\WriterEntityFactory;
-use OpenSpout\Writer\WriterInterface;
-use OpenSpout\Writer\XLSX\Writer as XLSXWriter;
 use Kriss\DataExporter\Writer\Extension\NullSpoutExtend;
 use Kriss\DataExporter\Writer\Extension\SpoutExtendInterface;
 use Kriss\DataExporter\Writer\Traits\ShowHeaderTrait;
+use OpenSpout\Writer\Common\Creator\WriterEntityFactory;
+use OpenSpout\Writer\WriterInterface;
+use OpenSpout\Writer\WriterMultiSheetsAbstract;
 use Sonata\Exporter\Writer\TypedWriterInterface;
 
 abstract class BaseSpoutWriter implements TypedWriterInterface
@@ -25,7 +25,7 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
     public function __construct(string $filename, ?bool $showHeaders = null, ?SpoutExtendInterface $extend = null)
     {
         if (! interface_exists('OpenSpout\Writer\WriterInterface')) {
-            throw new \InvalidArgumentException('must install `box/spout` first');
+            throw new \InvalidArgumentException('must install `openspout/openspout` first');
         }
 
         $this->filename = $filename;
@@ -44,11 +44,7 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
     public function open()
     {
         $this->writer = $this->getWriter();
-        if ($this->writer instanceof XLSXWriter && method_exists($this->writer, 'setDefaultRowHeight')) {
-            /**
-             * This PR is not merged
-             * @link https://github.com/box/spout/pull/715
-             */
+        if ($this->writer instanceof WriterMultiSheetsAbstract) {
             $this->writer->setDefaultRowHeight(15);
         }
         $this->extend->beforeOpen($this->writer);
@@ -79,9 +75,14 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
     {
         $cells = [];
         foreach ($data as $index => $cellValue) {
-            $cells[] = WriterEntityFactory::createCell($cellValue, $this->extend->buildCellStyle($index, $this->row));
+            $cell = WriterEntityFactory::createCell($cellValue, $this->extend->buildCellStyle($index, $this->row));
+            $this->extend->afterCellCreate($index, $this->row, $cell);
+            $cells[] = $cell;
         }
-        $this->writer->addRow(WriterEntityFactory::createRow($cells, $this->extend->buildRowStyle($this->row)));
+        $row = WriterEntityFactory::createRow($cells, $this->extend->buildRowStyle($this->row));
+        $this->extend->afterRowCreate($this->row, $row);
+
+        $this->writer->addRow($row);
     }
 
     public function close()

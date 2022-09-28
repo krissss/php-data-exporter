@@ -14,8 +14,8 @@ it("Event", function () {
     DataExporter::csv($source)
         ->withEvents([
             DataExporter\Builder::EVENT_AFTER_ECHO_ROW_WRITE => function ($data, $index) use ($source, &$count) {
-                expect($data)->toBe($source[$count]);
-                expect($index)->toBe($count);
+                expect($data)->toBe($source[$count])
+                    ->and($index)->toBe($count);
                 $count += 1;
             },
         ])
