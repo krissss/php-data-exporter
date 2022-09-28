@@ -32,6 +32,9 @@ use Sonata\Exporter\Writer\XlsxWriter;
  */
 class DataExporter
 {
+    /**
+     * @var ContainerContract
+     */
     protected static $container;
 
     public static function __callStatic($name, $arguments)

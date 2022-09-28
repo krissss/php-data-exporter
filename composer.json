@@ -15,21 +15,22 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0",
-        "sonata-project/exporter": "^2.10",
-        "illuminate/container": "^5.5|^6|^7|^8",
-        "illuminate/support": "^5.5|^6|^7|^8",
-        "symfony/http-foundation": "^3|^4|^5"
+        "php": "^7.4|^8.0",
+        "illuminate/container": "^5.5|^6|^7|^8|^9",
+        "illuminate/support": "^5.5|^6|^7|^8|^9",
+        "sonata-project/exporter": "^2.13"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
-        "kriss/spout": "v3.3.0.1",
+        "openspout/openspout": "^3.7",
         "pestphp/pest": "^1.20",
-        "phpoffice/phpspreadsheet": "^1.21"
+        "phpoffice/phpspreadsheet": "^1.21",
+        "symfony/http-foundation": "^5.4"
     },
     "suggest": {
         "phpoffice/phpspreadsheet": "export xlsx",
-        "box/spout": "export xlsxSpout"
+        "box/spout": "export xlsxSpout",
+        "openspout/openspout": "box/spout replacer"
     },
     "autoload": {
         "psr-4": {
@@ -47,7 +48,10 @@
         "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

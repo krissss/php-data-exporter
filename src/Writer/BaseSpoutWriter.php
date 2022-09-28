@@ -2,9 +2,9 @@
 
 namespace Kriss\DataExporter\Writer;
 
-use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
-use Box\Spout\Writer\WriterInterface;
-use Box\Spout\Writer\XLSX\Writer as XLSXWriter;
+use OpenSpout\Writer\Common\Creator\WriterEntityFactory;
+use OpenSpout\Writer\WriterInterface;
+use OpenSpout\Writer\XLSX\Writer as XLSXWriter;
 use Kriss\DataExporter\Writer\Extension\NullSpoutExtend;
 use Kriss\DataExporter\Writer\Extension\SpoutExtendInterface;
 use Kriss\DataExporter\Writer\Traits\ShowHeaderTrait;
@@ -24,7 +24,7 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
 
     public function __construct(string $filename, ?bool $showHeaders = null, ?SpoutExtendInterface $extend = null)
     {
-        if (! interface_exists('Box\Spout\Writer\WriterInterface')) {
+        if (! interface_exists('OpenSpout\Writer\WriterInterface')) {
             throw new \InvalidArgumentException('must install `box/spout` first');
         }
 

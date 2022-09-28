@@ -75,6 +75,10 @@ class Handler
      */
     public function browserDownload(string $downloadName): StreamedResponse
     {
+        if (! class_exists(StreamedResponse::class)) {
+            throw new InvalidArgumentException('must install symfony/http-foundation first');
+        }
+
         $response = new StreamedResponse(function () {
             $builder = $this->builder->withWriter($this->makeWriter('php://output'));
             foreach ($this->events as $eventName => $handler) {

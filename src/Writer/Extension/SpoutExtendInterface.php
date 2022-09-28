@@ -2,8 +2,8 @@
 
 namespace Kriss\DataExporter\Writer\Extension;
 
-use Box\Spout\Common\Entity\Style\Style;
-use Box\Spout\Writer\WriterInterface;
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Writer\WriterInterface;
 
 interface SpoutExtendInterface
 {

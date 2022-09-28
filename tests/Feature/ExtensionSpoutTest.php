@@ -1,9 +1,9 @@
 <?php
 
-use Box\Spout\Common\Entity\Style\Color;
-use Box\Spout\Common\Entity\Style\Style;
-use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
-use Box\Spout\Writer\WriterInterface;
+use OpenSpout\Common\Entity\Style\Color;
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
+use OpenSpout\Writer\WriterInterface;
 use Kriss\DataExporter\DataExporter;
 use Kriss\DataExporter\Writer\Extension\NullSpoutExtend;
 
