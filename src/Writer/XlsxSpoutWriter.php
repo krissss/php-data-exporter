@@ -2,12 +2,12 @@
 
 namespace Kriss\DataExporter\Writer;
 
-use OpenSpout\Writer\Common\Creator\WriterEntityFactory;
-use OpenSpout\Writer\WriterInterface;
-use OpenSpout\Writer\XLSX\Writer;
 use Kriss\DataExporter\Writer\Interfaces\ExcelSheetSupportInterface;
 use Kriss\DataExporter\Writer\Traits\ExcelSheetSpoutTrait;
 use Kriss\DataExporter\Writer\Traits\XlsxTypedTrait;
+use OpenSpout\Writer\Common\Creator\WriterEntityFactory;
+use OpenSpout\Writer\WriterInterface;
+use OpenSpout\Writer\XLSX\Writer;
 
 class XlsxSpoutWriter extends BaseSpoutWriter implements ExcelSheetSupportInterface
 {
