@@ -24,12 +24,10 @@ class CallableSourceIterator implements Iterator
         return $this->callableResult;
     }
 
-
     public function current(): mixed
     {
         return $this->parseCallable()->current();
     }
-
 
     public function next(): void
     {
