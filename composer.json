@@ -16,8 +16,8 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "illuminate/container": "^5.5|^6|^7|^8|^9",
-        "illuminate/support": "^5.5|^6|^7|^8|^9",
+        "illuminate/container": ">=5",
+        "illuminate/support": ">=5",
         "sonata-project/exporter": "^2.13"
     },
     "require-dev": {
@@ -25,7 +25,7 @@
         "openspout/openspout": "^3.7",
         "pestphp/pest": "^1.20",
         "phpoffice/phpspreadsheet": "^1.21",
-        "symfony/http-foundation": "^5.4"
+        "symfony/http-foundation": ">=3"
     },
     "suggest": {
         "phpoffice/phpspreadsheet": "export xlsx",
