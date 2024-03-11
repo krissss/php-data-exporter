@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Str;
 use Kriss\DataExporter\DataExporter;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -17,7 +16,7 @@ it('Handler with browserDownload', function () {
 
     expect($response)->toBeInstanceOf(StreamedResponse::class);
     expect(
-        Str::contains($response->headers->get('Content-Disposition'), 'test.csv')
+        str_contains($response->headers->get('Content-Disposition'), 'test.csv')
     )->toBeTrue();
 });
 

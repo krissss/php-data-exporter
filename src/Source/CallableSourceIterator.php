@@ -3,9 +3,8 @@
 namespace Kriss\DataExporter\Source;
 
 use Iterator;
-use Sonata\Exporter\Source\SourceIteratorInterface;
 
-class CallableSourceIterator implements SourceIteratorInterface
+class CallableSourceIterator implements Iterator
 {
     protected $callable;
 
@@ -14,7 +13,7 @@ class CallableSourceIterator implements SourceIteratorInterface
         $this->callable = $callback;
     }
 
-    protected $callableResult;
+    protected mixed $callableResult = null;
 
     protected function parseCallable(): Iterator
     {
@@ -25,42 +24,29 @@ class CallableSourceIterator implements SourceIteratorInterface
         return $this->callableResult;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function current()
+
+    public function current(): mixed
     {
         return $this->parseCallable()->current();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function next()
+
+    public function next(): void
     {
         $this->parseCallable()->next();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function key()
+    public function key(): mixed
     {
         return $this->parseCallable()->key();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function valid()
+    public function valid(): bool
     {
         return $this->parseCallable()->valid();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function rewind()
+    public function rewind(): void
     {
         $this->parseCallable()->rewind();
     }

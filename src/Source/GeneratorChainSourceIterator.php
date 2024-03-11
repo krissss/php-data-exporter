@@ -2,59 +2,36 @@
 
 namespace Kriss\DataExporter\Source;
 
-use Sonata\Exporter\Source\SourceIteratorInterface;
-
-class GeneratorChainSourceIterator implements SourceIteratorInterface
+class GeneratorChainSourceIterator implements \Iterator
 {
-    /**
-     * @var \Generator
-     */
-    private $generator;
+    private \Generator $generator;
 
     public function __construct(\Closure $generator)
     {
         $this->generator = call_user_func($generator);
-        if (! $this->generator instanceof \Generator) {
-            throw new \InvalidArgumentException('$generator must return \Generator');
-        }
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function current()
+    public function current(): mixed
     {
         return $this->generator->current();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function next()
+    public function next(): void
     {
         $this->generator->next();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function key()
+    public function key(): mixed
     {
         return $this->generator->key();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function valid()
+    public function valid(): bool
     {
         return $this->generator->valid();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function rewind()
+    public function rewind(): void
     {
         $this->generator->rewind();
     }

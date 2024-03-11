@@ -32,23 +32,17 @@ use Sonata\Exporter\Writer\XlsxWriter;
  */
 class DataExporter
 {
-    /**
-     * @var ContainerContract
-     */
-    protected static $container;
+    protected static ?ContainerContract $container = null;
 
     public static function __callStatic($name, $arguments)
     {
-        if (! static::$container instanceof ContainerContract) {
+        if (static::$container === null) {
             static::$container = static::getContainer();
         }
 
         return new Handler(static::$container, $arguments[0], $name, $arguments[1] ?? []);
     }
 
-    /**
-     * @return ContainerContract
-     */
     final protected static function getContainer(): ContainerContract
     {
         $container = static::getContainerInstance();
@@ -63,16 +57,13 @@ class DataExporter
         return $container;
     }
 
-    /**
-     * @return ContainerContract
-     */
     protected static function getContainerInstance(): ContainerContract
     {
         return new Container();
     }
 
     /**
-     * @return array[]
+     * @return array<string, array{class: string, options: array, extension: string}>
      */
     protected static function writerConfig(): array
     {

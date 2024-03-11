@@ -7,7 +7,7 @@ trait ShowHeaderTrait
     /**
      * @var null|bool null is auto
      */
-    protected $showHeaders = null;
+    protected ?bool $showHeaders = null;
 
     /**
      * @param array $data

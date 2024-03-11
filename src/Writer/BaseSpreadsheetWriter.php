@@ -13,15 +13,12 @@ abstract class BaseSpreadsheetWriter implements TypedWriterInterface
 {
     use ShowHeaderTrait;
 
-    protected $filename;
-    protected $extend;
+    protected string $filename;
+    protected SpreadsheetExtendInterface $extend;
 
-    /**
-     * @var IWriter
-     */
-    protected $writer;
+    protected IWriter $writer;
 
-    public function __construct(string $filename, ?bool $showHeaders = null, ?SpreadsheetExtendInterface $extend = null)
+    final public function __construct(string $filename, ?bool $showHeaders = null, ?SpreadsheetExtendInterface $extend = null)
     {
         if (! interface_exists('PhpOffice\PhpSpreadsheet\Writer\IWriter')) {
             throw new \InvalidArgumentException('must install `phpoffice/phpspreadsheet` first');
@@ -32,31 +29,18 @@ abstract class BaseSpreadsheetWriter implements TypedWriterInterface
         $this->extend = $extend ?: new NullSpreadsheetExtend();
     }
 
-    /**
-     * @param Spreadsheet $spreadsheet
-     * @return IWriter
-     */
     abstract protected function getWriter(Spreadsheet $spreadsheet): IWriter;
 
-    /**
-     * @var Spreadsheet
-     */
-    protected $spreadsheet;
+    protected Spreadsheet $spreadsheet;
 
-    /**
-     * @inheritDoc
-     */
-    public function open()
+    public function open(): void
     {
         $this->spreadsheet = new Spreadsheet();
     }
 
-    protected $row = 1;
+    protected int $row = 1;
 
-    /**
-     * @inheritDoc
-     */
-    public function write(array $data)
+    public function write(array $data): void
     {
         if ($this->row === 1 && $this->shouldAddHeader($data)) {
             $this->writeRow(array_keys($data));
@@ -66,7 +50,7 @@ abstract class BaseSpreadsheetWriter implements TypedWriterInterface
         $this->row++;
     }
 
-    protected function writeRow(array $data)
+    protected function writeRow(array $data): void
     {
         $this->spreadsheet->getActiveSheet()->fromArray($data, null, 'A' . $this->row, true);
     }
@@ -76,7 +60,7 @@ abstract class BaseSpreadsheetWriter implements TypedWriterInterface
         $this->row = 1;
     }
 
-    public function close()
+    public function close(): void
     {
         $this->spreadsheet->setActiveSheetIndex(0); // reset active sheet
         $writer = $this->getWriter($this->spreadsheet);

@@ -6,7 +6,6 @@ interface ExcelSheetSupportInterface
 {
     /**
      * 设置并激活 sheet
-     * @param int|string $sheet
      */
-    public function setActiveSheet($sheet): void;
+    public function setActiveSheet(int|string $sheet): void;
 }

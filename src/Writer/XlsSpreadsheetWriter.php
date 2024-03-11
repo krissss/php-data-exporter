@@ -14,9 +14,7 @@ class XlsSpreadsheetWriter extends BaseSpreadsheetWriter implements ExcelSheetSu
     use XlsTypedTrait;
     use ExcelSheetSpreadsheetTrait;
 
-    /**
-     * @inheritDoc
-     */
+
     protected function getWriter(Spreadsheet $spreadsheet): IWriter
     {
         return IOFactory::createWriter($spreadsheet, 'Xls');

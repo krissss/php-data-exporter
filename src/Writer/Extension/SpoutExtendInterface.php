@@ -2,8 +2,6 @@
 
 namespace Kriss\DataExporter\Writer\Extension;
 
-use OpenSpout\Common\Entity\Cell;
-use OpenSpout\Common\Entity\Row;
 use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Writer\WriterInterface;
 
@@ -11,47 +9,30 @@ interface SpoutExtendInterface
 {
     /**
      * 打开文件前
-     * @link https://github.com/openspout/openspout/blob/3.x/docs/documentation.md
+     * @link https://github.com/openspout/openspout/blob/4.x/docs/documentation.md
      * @param WriterInterface $writer
      * @return void
      */
-    public function beforeOpen(WriterInterface $writer);
+    public function beforeOpen(WriterInterface $writer): void;
 
     /**
      * 构建单个 cell 的样式
      * @param int|string $colIndex 列数据的 index
      * @param int $rowIndex start from 1
      * @return Style|null
-     * @link https://github.com/openspout/openspout/blob/3.x/docs/documentation.md#styling-cells
+     * @link https://github.com/openspout/openspout/blob/4.x/docs/documentation.md#styling-cells
      * @deprecated  下个版本移除，使用
      */
-    public function buildCellStyle($colIndex, $rowIndex): ?Style;
-
-    /**
-     * cell 创建后，可以修改 cell 的样式等
-     * @link https://github.com/openspout/openspout/blob/3.x/docs/documentation.md#styling-cells
-     * @param int|string $colIndex 列数据的 index
-     * @param int $rowIndex start from 1
-     * @param Cell $cell
-     */
-    public function afterCellCreate($colIndex, int $rowIndex, Cell $cell): void;
+    public function buildCellStyle(int|string $colIndex, int $rowIndex): ?Style;
 
     /**
      * 构建单个 row 的样式
      * @param int $rowIndex start from 1
      * @return Style|null
      * @deprecated 下个版本移除，使用
-     * @link https://github.com/openspout/openspout/blob/3.x/docs/documentation.md#styling-rows
+     * @link https://github.com/openspout/openspout/blob/4.x/docs/documentation.md#styling-rows
      */
-    public function buildRowStyle($rowIndex): ?Style;
-
-    /**
-     * row 创建后，可以修改 row 的样式等
-     * @link https://github.com/openspout/openspout/blob/3.x/docs/documentation.md#styling-rows
-     * @param int $rowIndex start from 1
-     * @param Row $row
-     */
-    public function afterRowCreate(int $rowIndex, Row $row): void;
+    public function buildRowStyle(int $rowIndex): ?Style;
 
     /**
      * 关闭前

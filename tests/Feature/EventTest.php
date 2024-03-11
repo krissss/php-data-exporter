@@ -13,7 +13,7 @@ it("Event", function () {
     $count = 0;
     DataExporter::csv($source)
         ->withEvents([
-            DataExporter\Builder::EVENT_AFTER_ECHO_ROW_WRITE => function ($data, $index) use ($source, &$count) {
+            DataExporter\Builder::EVENT_AFTER_EACH_ROW_WRITE => function ($data, $index) use ($source, &$count) {
                 expect($data)->toBe($source[$count])
                     ->and($index)->toBe($count);
                 $count += 1;

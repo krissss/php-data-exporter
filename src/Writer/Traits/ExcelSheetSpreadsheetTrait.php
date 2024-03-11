@@ -6,12 +6,9 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 trait ExcelSheetSpreadsheetTrait
 {
-    protected $isRemovedDefaultSheet = false;
+    protected bool $isRemovedDefaultSheet = false;
 
-    /**
-     * @inheritDoc
-     */
-    public function setActiveSheet($sheet): void
+    public function setActiveSheet(int|string $sheet): void
     {
         if (is_int($sheet)) {
             if ($sheet === 0) {

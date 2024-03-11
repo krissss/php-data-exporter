@@ -2,8 +2,7 @@
 
 namespace Kriss\DataExporter\DataExporter;
 
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Support\Str;
+use Illuminate\Contracts\Container\Container as ContainerContract;
 use InvalidArgumentException;
 use Kriss\DataExporter\Exceptions\FileAlreadyExistException;
 use Sonata\Exporter\Writer\WriterInterface;
@@ -14,12 +13,12 @@ class Handler
 {
     public const CONTAINER_DATA_EXPORT_CONFIG_KEY = 'kriss-data-export-config';
 
-    protected $container;
-    protected $writer;
-    protected $writerOptions;
-    protected $builder;
+    protected ContainerContract $container;
+    protected string $writer;
+    protected array $writerOptions;
+    protected Builder $builder;
 
-    public function __construct(Container $container, $source, string $writer, array $writerOptions = [])
+    public function __construct(ContainerContract $container, $source, string $writer, array $writerOptions = [])
     {
         $this->container = $container;
         $this->writer = $writer;
@@ -28,7 +27,7 @@ class Handler
             ->withSource($source);
     }
 
-    private $events = [];
+    private array $events = [];
 
     /**
      * @param array $events [$eventName => $handler]
@@ -42,7 +41,7 @@ class Handler
         return $this;
     }
 
-    private $filename;
+    private string $filename;
 
     /**
      * 保存文件
@@ -59,11 +58,7 @@ class Handler
                 throw new FileAlreadyExistException($filename);
             }
         }
-        $builder = $this->builder->withWriter($this->makeWriter($filename));
-        foreach ($this->events as $eventName => $handler) {
-            $builder->on($eventName, $handler);
-        }
-        $builder->export();
+        $this->doBuilderExport($filename);
 
         return $filename;
     }
@@ -80,11 +75,7 @@ class Handler
         }
 
         $response = new StreamedResponse(function () {
-            $builder = $this->builder->withWriter($this->makeWriter('php://output'));
-            foreach ($this->events as $eventName => $handler) {
-                $builder->on($eventName, $handler);
-            }
-            $builder->export();
+            $this->doBuilderExport('php://output');
         });
 
         if ($downloadName) {
@@ -92,7 +83,7 @@ class Handler
             $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
                 ResponseHeaderBag::DISPOSITION_ATTACHMENT,
                 $name,
-                Str::ascii($name)
+                'file_' . date('YmdHis') // 使用该名字代替 ascii 控制是因为 Str::ascii 也可能存在内置不支持的情况
             ));
         }
 
@@ -105,14 +96,12 @@ class Handler
     public function clean(): void
     {
         // 关闭 writer
-        if ($this->builder) {
-            if ($writer = $this->builder->getWriter()) {
-                $writer->close();
-            }
+        if ($writer = $this->builder->getWriter()) {
+            $writer->close();
         }
         // 清理文件
         if ($this->filename && is_file($this->filename)) {
-            @unlink($this->filename);
+            unlink($this->filename);
         }
     }
 
@@ -123,7 +112,7 @@ class Handler
      */
     public function makeFilename(string $filename): string
     {
-        if (strpos($filename, 'php://') !== false) {
+        if (str_contains($filename, 'php://')) {
             return $filename;
         }
         $extension = $this->getWriterConfig()['extension'];
@@ -165,10 +154,19 @@ class Handler
 
         return $this->container->make($config['class'], array_merge(
             [
-                'filename' => $filename,
+                'filename' => $filename, // 第一个参数必须
             ],
-            $config['options'] ?? [],
-            $this->writerOptions ?? []
+            $config['options'] ?? [], // 全局的配置
+            $this->writerOptions ?? [] // 用户调用时的配置
         ));
+    }
+
+    private function doBuilderExport(string $filename): void
+    {
+        $builder = $this->builder->withWriter($this->makeWriter($filename));
+        foreach ($this->events as $eventName => $handler) {
+            $builder->on($eventName, $handler);
+        }
+        $builder->export();
     }
 }

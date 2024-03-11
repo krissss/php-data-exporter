@@ -4,9 +4,9 @@ namespace Kriss\DataExporter\Traits;
 
 trait ObjectEventsSupportTrait
 {
-    private $objectEvents = [];
+    private array $objectEvents = [];
 
-    public function on(string $eventName, callable $handler): self
+    public function on(string $eventName, callable $handler): static
     {
         $this->objectEvents[$eventName][] = $handler;
 

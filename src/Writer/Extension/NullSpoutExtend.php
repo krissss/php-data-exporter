@@ -2,53 +2,25 @@
 
 namespace Kriss\DataExporter\Writer\Extension;
 
-use OpenSpout\Common\Entity\Cell;
-use OpenSpout\Common\Entity\Row;
 use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Writer\WriterInterface;
 
 class NullSpoutExtend implements SpoutExtendInterface
 {
-    /**
-     * @inheritDoc
-     */
-    public function beforeOpen(WriterInterface $writer)
+    public function beforeOpen(WriterInterface $writer): void
     {
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function buildCellStyle($colIndex, $rowIndex): ?Style
+    public function buildCellStyle(int|string $colIndex, int $rowIndex): ?Style
     {
         return null;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function afterCellCreate($colIndex, int $rowIndex, Cell $cell): void
-    {
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function buildRowStyle($rowIndex): ?Style
+    public function buildRowStyle(int $rowIndex): ?Style
     {
         return null;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function afterRowCreate(int $rowIndex, Row $row): void
-    {
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function beforeClose(WriterInterface $writer): void
     {
     }

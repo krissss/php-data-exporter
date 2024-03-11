@@ -11,9 +11,6 @@ class CsvSpreadsheetWriter extends BaseSpreadsheetWriter
 {
     use CsvTypedTrait;
 
-    /**
-     * @inheritDoc
-     */
     protected function getWriter(Spreadsheet $spreadsheet): IWriter
     {
         return IOFactory::createWriter($spreadsheet, 'Csv');

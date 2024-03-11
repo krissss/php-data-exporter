@@ -5,22 +5,19 @@ namespace Kriss\DataExporter\Writer;
 use Kriss\DataExporter\Writer\Extension\NullSpoutExtend;
 use Kriss\DataExporter\Writer\Extension\SpoutExtendInterface;
 use Kriss\DataExporter\Writer\Traits\ShowHeaderTrait;
-use OpenSpout\Writer\Common\Creator\WriterEntityFactory;
+use OpenSpout\Common\Entity\Cell;
+use OpenSpout\Common\Entity\Row;
 use OpenSpout\Writer\WriterInterface;
-use OpenSpout\Writer\WriterMultiSheetsAbstract;
 use Sonata\Exporter\Writer\TypedWriterInterface;
 
 abstract class BaseSpoutWriter implements TypedWriterInterface
 {
     use ShowHeaderTrait;
 
-    protected $filename;
-    protected $extend;
+    protected string $filename;
+    protected SpoutExtendInterface $extend;
 
-    /**
-     * @var WriterInterface
-     */
-    protected $writer;
+    protected WriterInterface $writer;
 
     public function __construct(string $filename, ?bool $showHeaders = null, ?SpoutExtendInterface $extend = null)
     {
@@ -33,30 +30,18 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
         $this->extend = $extend ?: new NullSpoutExtend();
     }
 
-    /**
-     * @return WriterInterface
-     */
     abstract protected function getWriter(): WriterInterface;
 
-    /**
-     * @inheritDoc
-     */
-    public function open()
+    public function open(): void
     {
         $this->writer = $this->getWriter();
-        if ($this->writer instanceof WriterMultiSheetsAbstract) {
-            $this->writer->setDefaultRowHeight(15);
-        }
         $this->extend->beforeOpen($this->writer);
         $this->writer->openToFile($this->filename);
     }
 
-    protected $row = 1;
+    protected int $row = 1;
 
-    /**
-     * @inheritDoc
-     */
-    public function write(array $data)
+    public function write(array $data): void
     {
         if ($this->row === 1 && $this->shouldAddHeader($data)) {
             $this->writeRow(array_keys($data));
@@ -71,21 +56,19 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
         $this->row = 1;
     }
 
-    protected function writeRow(array $data)
+    protected function writeRow(array $data): void
     {
         $cells = [];
         foreach ($data as $index => $cellValue) {
-            $cell = WriterEntityFactory::createCell($cellValue, $this->extend->buildCellStyle($index, $this->row));
-            $this->extend->afterCellCreate($index, $this->row, $cell);
+            $cell = Cell::fromValue($cellValue, $this->extend->buildCellStyle($index, $this->row));
             $cells[] = $cell;
         }
-        $row = WriterEntityFactory::createRow($cells, $this->extend->buildRowStyle($this->row));
-        $this->extend->afterRowCreate($this->row, $row);
+        $row = new Row($cells, $this->extend->buildRowStyle($this->row));
 
         $this->writer->addRow($row);
     }
 
-    public function close()
+    public function close(): void
     {
         $this->extend->beforeClose($this->writer);
         $this->writer->close();

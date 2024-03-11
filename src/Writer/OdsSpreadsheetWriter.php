@@ -14,9 +14,6 @@ class OdsSpreadsheetWriter extends BaseSpreadsheetWriter implements ExcelSheetSu
     use OdsTypedTrait;
     use ExcelSheetSpreadsheetTrait;
 
-    /**
-     * @inheritDoc
-     */
     protected function getWriter(Spreadsheet $spreadsheet): IWriter
     {
         return IOFactory::createWriter($spreadsheet, 'Ods');

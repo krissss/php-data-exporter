@@ -16,25 +16,19 @@ class Builder
 {
     use ObjectEventsSupportTrait;
 
-    public const EVENT_AFTER_OPEN = 'afterOpen';
-    public const EVENT_BEFORE_CLOSE = 'beforeClose';
-    public const EVENT_BEFORE_ECHO_ROW_WRITE = 'beforeEchoRowWrite';
-    public const EVENT_AFTER_ECHO_ROW_WRITE = 'afterEchoRowWrite';
+    public const EVENT_AFTER_OPEN = 'afterOpen'; // 打开文件后
+    public const EVENT_BEFORE_CLOSE = 'beforeClose'; // 关闭前
+    public const EVENT_BEFORE_EACH_ROW_WRITE = 'beforeEachRowWrite'; // 每一行写入前
+    public const EVENT_AFTER_EACH_ROW_WRITE = 'afterEachRowWrite'; // 每一行写入后
 
-    /**
-     * @var WriterInterface
-     */
-    private $writer;
-    /**
-     * @var Iterator|GeneratorChainSourceIterator
-     */
-    private $source;
+    private WriterInterface $writer;
+    private GeneratorChainSourceIterator|Iterator $source;
 
     /**
      * @param WriterInterface $writer
      * @return $this
      */
-    public function withWriter(WriterInterface $writer): self
+    public function withWriter(WriterInterface $writer): static
     {
         $this->writer = $writer;
 
@@ -45,7 +39,7 @@ class Builder
      * @param $source
      * @return $this
      */
-    public function withSource($source): self
+    public function withSource($source): static
     {
         if ($source instanceof Arrayable) {
             $source = $source->toArray();
@@ -84,7 +78,7 @@ class Builder
     public function export(): void
     {
         $this->writer->open();
-        $this->handleEvent(self::EVENT_AFTER_OPEN, $this);
+        $this->handleEvent(static::EVENT_AFTER_OPEN, $this);
 
         $index = 0;
         $lastSheet = null;
@@ -94,14 +88,14 @@ class Builder
                 $lastSheet = $key; // 相同 sheet 名不重复设置
             }
             foreach ($source as $data) {
-                $this->handleEvent(self::EVENT_BEFORE_ECHO_ROW_WRITE, $data, $index, $this);
+                $this->handleEvent(static::EVENT_BEFORE_EACH_ROW_WRITE, $data, $index, $this);
                 $this->writer->write($data);
-                $this->handleEvent(self::EVENT_AFTER_ECHO_ROW_WRITE, $data, $index, $this);
+                $this->handleEvent(static::EVENT_AFTER_EACH_ROW_WRITE, $data, $index, $this);
                 $index++;
             }
         }
 
-        $this->handleEvent(self::EVENT_BEFORE_CLOSE, $this);
+        $this->handleEvent(static::EVENT_BEFORE_CLOSE, $this);
         $this->writer->close();
     }
 

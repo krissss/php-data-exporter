@@ -2,15 +2,17 @@
 
 namespace Kriss\DataExporter\Writer\Traits;
 
+use OpenSpout\Writer\AbstractWriterMultiSheets;
+
 trait ExcelSheetSpoutTrait
 {
-    protected $isRemovedDefaultSheet = false;
+    protected bool $isRemovedDefaultSheet = false;
 
-    /**
-     * @inheritDoc
-     */
-    public function setActiveSheet($sheet): void
+    public function setActiveSheet(int|string $sheet): void
     {
+        if (! $this->writer instanceof AbstractWriterMultiSheets) {
+            throw new \InvalidArgumentException('writer must be AbstractWriterMultiSheets');
+        }
         if (is_int($sheet)) {
             if ($sheet === 0) {
                 return;

@@ -15,17 +15,17 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
-        "illuminate/container": ">=5",
-        "illuminate/support": ">=5",
-        "sonata-project/exporter": "^2.13"
+        "php": "^8.1",
+        "illuminate/container": ">=9",
+        "sonata-project/exporter": "^3.3"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "openspout/openspout": "^3.7",
+        "friendsofphp/php-cs-fixer": "^3.51",
+        "illuminate/support": ">=9",
+        "openspout/openspout": "^4.23",
         "pestphp/pest": "^1.20",
-        "phpoffice/phpspreadsheet": "^1.21",
-        "symfony/http-foundation": ">=3"
+        "phpoffice/phpspreadsheet": "^1.0|^2.0",
+        "symfony/http-foundation": ">=5"
     },
     "suggest": {
         "phpoffice/phpspreadsheet": "export xlsx",

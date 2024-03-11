@@ -2,10 +2,9 @@
 
 use Kriss\DataExporter\DataExporter;
 use Kriss\DataExporter\Writer\Extension\NullSpoutExtend;
-use OpenSpout\Common\Entity\Cell;
 use OpenSpout\Common\Entity\Row;
 use OpenSpout\Common\Entity\Style\Color;
-use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
+use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Writer\WriterInterface;
 
 /**
@@ -15,12 +14,13 @@ class ConfigCsvExtend extends NullSpoutExtend
 {
     /**
      * @inheritDoc
-     * @link https://github.com/openspout/openspout/blob/3.x/docs/documentation.md#configuration-for-csv
+     * @link https://github.com/openspout/openspout/blob/4.x/docs/documentation.md#configuration-for-csv
      */
-    public function beforeOpen(WriterInterface $writer)
+    public function beforeOpen(WriterInterface $writer): void
     {
         if ($writer instanceof \OpenSpout\Writer\CSV\Writer) {
-            $writer->setFieldDelimiter('|');
+            $options = $writer->getOptions();
+            $options->FIELD_DELIMITER = '|';
         }
     }
 }
@@ -33,14 +33,17 @@ class DefaultStyleExtend extends NullSpoutExtend
     /**
      * @inheritDoc
      */
-    public function beforeOpen(WriterInterface $writer)
+    public function beforeOpen(WriterInterface $writer): void
     {
-        $style = (new StyleBuilder())
-            ->setFontName('Arial')
-            ->setFontSize(11)
-            ->setFontColor(Color::GREEN)
-            ->build();
-        $writer->setDefaultRowStyle($style);
+
+        if ($writer instanceof OpenSpout\Writer\XLSX\Writer || $writer instanceof OpenSpout\Writer\ODS\Writer) {
+            $style = (new Style())
+                ->setFontName('Arial')
+                ->setFontSize(11)
+                ->setFontColor(Color::GREEN);
+            $options = $writer->getOptions();
+            $options->DEFAULT_ROW_STYLE = $style;
+        }
     }
 }
 
@@ -52,81 +55,51 @@ class RowCellStyleExtend extends NullSpoutExtend
     /**
      * @inheritDoc
      */
-    public function afterCellCreate($colIndex, int $rowIndex, Cell $cell): void
+    public function buildCellStyle(int|string $colIndex, int $rowIndex): ?Style
     {
         if ($colIndex === 0 && $rowIndex === 2) {
             // 第一列，第二行（A2）
-            $cell->setStyle(
-                (new StyleBuilder())
-                    ->setFontColor(Color::RED)
-                    ->setFontBold()
-                    ->build()
-            );
-
-            return;
+            return (new Style())
+                ->setFontColor(Color::RED)
+                ->setFontBold();
         }
         if ($colIndex === 1 && $rowIndex === 2) {
             // 第二列，第二行（B2）
-            $cell->setStyle(
-                (new StyleBuilder())
-                    ->setFontColor(Color::WHITE)
-                    ->setBackgroundColor(Color::BLACK)
-                    ->build()
-            );
-
-            return;
+            return (new Style())
+                ->setFontColor(Color::WHITE)
+                ->setBackgroundColor(Color::BLACK);
         }
         if ($colIndex === 0 && $rowIndex === 2) {
             // 第一列，第五行（A5）
-            $cell->setStyle(
-                (new StyleBuilder())
-                    ->setShouldWrapText()
-                    ->build()
-            );
-
-            return;
+            return (new Style())
+                ->setShouldWrapText();
         }
 
-        return;
+        return null;
     }
 
     /**
      * @inheritDoc
      */
-    public function afterRowCreate(int $rowIndex, Row $row): void
+    public function buildRowStyle(int $rowIndex): ?Style
     {
         if ($rowIndex === 3) {
             // 第三行
-            $row->setStyle(
-                (new StyleBuilder())
-                    ->setBackgroundColor(Color::BLUE)
-                    ->build()
-            );
-
-            return;
+            return (new Style())
+                ->setBackgroundColor(Color::BLUE);
         }
         if ($rowIndex === 1) {
             // 第一行
-            $row->setStyle(
-                (new StyleBuilder())
-                    ->setCellAlignment(\OpenSpout\Common\Entity\Style\CellAlignment::CENTER)
-                    ->build()
-            );
-
-            return;
+            return (new Style())
+                ->setCellAlignment(\OpenSpout\Common\Entity\Style\CellAlignment::CENTER);
         }
         if ($rowIndex === 6) {
             // 第五行
-            $row->setStyle(
-                (new StyleBuilder())
-                ->setShouldShrinkToFit()
-                ->build()
-            );
-
-            return;
+            return (new Style())
+                ->setShouldShrinkToFit();
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -135,9 +108,13 @@ class RowCellStyleExtend extends NullSpoutExtend
     public function beforeClose(WriterInterface $writer): void
     {
         if ($writer instanceof \OpenSpout\Writer\XLSX\Writer) {
+            $options = $writer->getOptions();
             // 合并单元格
-            $writer->mergeCells([0, 5], [2, 5])
-                ->setColumnWidth(60, 1);
+            // https://github.com/openspout/openspout/blob/4.x/docs/documentation.md#cell-merging
+            $options->mergeCells(0, 5, 2, 5);
+            // 设置列宽
+            // https://github.com/openspout/openspout/blob/4.x/docs/documentation.md#column-widths
+            $options->setColumnWidth(60, 1);
         }
     }
 }
@@ -160,9 +137,9 @@ it("Extension Spout: config csv", function () {
         'extend' => new ConfigCsvExtend(),
     ])->saveAs($this->filename);
 
-    /** @var \OpenSpout\Reader\CSV\Reader $reader */
-    $reader = \OpenSpout\Reader\Common\Creator\ReaderEntityFactory::createCSVReader();
-    $reader->setFieldDelimiter('|');
+    $options = new \OpenSpout\Reader\CSV\Options();
+    $options->FIELD_DELIMITER = '|';
+    $reader = new \OpenSpout\Reader\CSV\Reader($options);
     $reader->open($filename);
     $firstRow = [];
     foreach ($reader->getSheetIterator() as $sheet) {
