@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": ">=7.3",
+        "php": "^7.3",
         "sonata-project/exporter": "^2.10",
         "illuminate/container": ">=5",
         "illuminate/support": ">=5",
