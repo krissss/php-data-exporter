@@ -32,6 +32,9 @@ use Sonata\Exporter\Writer\XlsxWriter;
  */
 class DataExporter
 {
+    /**
+     * @var ContainerContract
+     */
     protected static $container;
 
     public static function __callStatic($name, $arguments)
@@ -40,7 +43,12 @@ class DataExporter
             static::$container = static::getContainer();
         }
 
-        return new Handler(static::$container, $arguments[0], $name, $arguments[1] ?? []);
+        return static::$container->make(Handler::class, [
+            'container' => static::$container,
+            'source' => $arguments[0],
+            'writer' => $name,
+            'writerOptions' => $arguments[1] ?? [],
+        ]);
     }
 
     /**
@@ -50,14 +58,23 @@ class DataExporter
     {
         $container = static::getContainerInstance();
 
-        $container->singleton(Handler::CONTAINER_DATA_EXPORT_CONFIG_KEY, function () {
-            return array_merge([
-                'writer' => static::writerConfig(),
-                'deleteFirstIfExist' => true,
-            ], static::customConfig());
-        });
+        if (! $container->has(Handler::CONTAINER_DATA_EXPORT_CONFIG_KEY)) {
+            $container->singleton(Handler::CONTAINER_DATA_EXPORT_CONFIG_KEY, function () {
+                return array_merge([
+                    'writer' => static::writerConfig(),
+                    'deleteFirstIfExist' => true,
+                ], static::customConfig());
+            });
+        }
 
         return $container;
+    }
+
+    private static $setContainer = null;
+
+    public static function setContainer(ContainerContract $container)
+    {
+        static::$setContainer = $container;
     }
 
     /**
@@ -65,13 +82,13 @@ class DataExporter
      */
     protected static function getContainerInstance(): ContainerContract
     {
-        return new Container();
+        return static::$setContainer ?: new Container();
     }
 
     /**
      * @return array[]
      */
-    protected static function writerConfig(): array
+    public static function writerConfig(): array
     {
         return [
             'csv' => [
