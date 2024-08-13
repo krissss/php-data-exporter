@@ -3,9 +3,11 @@
 namespace Kriss\DataExporter\DataExporter;
 
 use Illuminate\Contracts\Container\Container as ContainerContract;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Kriss\DataExporter\Exceptions\FileAlreadyExistException;
 use Sonata\Exporter\Writer\WriterInterface;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -79,11 +81,11 @@ class Handler
         });
 
         if ($downloadName) {
-            $name = basename($this->makeFilename($downloadName));
+            $name = $this->makeFilename($downloadName, false);
             $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
                 ResponseHeaderBag::DISPOSITION_ATTACHMENT,
                 $name,
-                'file_' . date('YmdHis') // 使用该名字代替 ascii 控制是因为 Str::ascii 也可能存在内置不支持的情况
+                str_replace('%', $this->getConfig()['filenameInvalidCharsReplace'], Str::ascii($name))
             ));
         }
 
@@ -108,27 +110,55 @@ class Handler
     /**
      * 生成的文件名
      * @param string $filename
+     * @param bool $maybeHasPath filename 中是否可能包含路径
      * @return string
      */
-    public function makeFilename(string $filename): string
+    public function makeFilename(string $filename, bool $maybeHasPath = true): string
     {
         if (str_contains($filename, 'php://')) {
             return $filename;
         }
-        $extension = $this->getWriterConfig()['extension'];
-        if (pathinfo($filename, PATHINFO_EXTENSION) !== $extension) {
-            $filename .= '.' . $extension;
+
+        $dirname = '';
+        $fileBasename = $filename;
+        if ($maybeHasPath) {
+            // 格式化文件路径
+            $filename = Path::canonicalize($filename);
+            // 截取 / 之后的作为文件名
+            if (($pos = strrpos($filename, '/')) !== false) {
+                $dirname = substr($filename, 0, $pos + 1); // 保留 /
+                $fileBasename = substr($filename, $pos + 1);
+            }
         }
 
-        return $filename;
+        $configExtension = $this->getWriterConfig()['extension'];
+        if (($pos = strpos($fileBasename, '.' . $configExtension . '?')) !== false) {
+            // 兼容同扩展名情况下，存在 ?x=1 的情况，比如：abc.csv?x=1，此时直接将 ? 后的删除
+            $fileBasename = substr($fileBasename, 0, $pos);
+        }
+
+        // 去除特殊符号
+        $invalidChars = ['/', '\\', ':', '*', '?', '"', '<', '>', '|'];
+        $fileBasename = str_replace($invalidChars, array_fill(0, count($invalidChars) - 1, $this->getConfig()['filenameInvalidCharsReplace']), $fileBasename); // 替换文件系统不支持的特殊符号
+
+        // 补全 ext
+        if (pathinfo($fileBasename, PATHINFO_EXTENSION) !== $configExtension) {
+            $fileBasename .= '.' . $configExtension;
+        }
+
+        return $dirname . $fileBasename;
     }
 
     /**
-     * @return array{writer: array, deleteFirstIfExist: bool}
+     * @return array{writer: array, deleteFirstIfExist: bool, filenameInvalidCharsReplace: string, filenameMaker: ?callable}
      */
     private function getConfig(): array
     {
-        return $this->container->get(static::CONTAINER_DATA_EXPORT_CONFIG_KEY);
+        return array_merge([
+            'writer' => [],
+            'deleteFirstIfExist' => true,
+            'filenameInvalidCharsReplace' => '_',
+        ], $this->container->get(static::CONTAINER_DATA_EXPORT_CONFIG_KEY));
     }
 
     /**
