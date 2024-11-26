@@ -29,7 +29,7 @@ class RowCellStyleExtend extends NullSpoutExtend
     /**
      * @inheritDoc
      */
-    public function buildCellStyle($colIndex, $rowIndex, array $context = []): ?Style
+    public function buildCellStyle($colIndex, $rowIndex): ?Style
     {
         if ($colIndex === 1 && $rowIndex === 2) {
             return (new StyleBuilder())
@@ -50,7 +50,7 @@ class RowCellStyleExtend extends NullSpoutExtend
     /**
      * @inheritDoc
      */
-    public function buildRowStyle($rowIndex, array $context = []): ?Style
+    public function buildRowStyle($rowIndex): ?Style
     {
         if ($rowIndex === 3) {
             return (new StyleBuilder())
@@ -130,10 +130,10 @@ it("Extension Spout: change style use context", function () {
     ], [
         'showHeaders' => false,
         'extend' => new class () extends NullSpoutExtend {
-            public function buildCellStyleWithContext($colIndex, int $rowIndex, array $context = []): ?Style
+            public function buildCellStyleWithContext($colIndex, int $rowIndex, array $context): ?Style
             {
                 if ($colIndex === 0) {
-                    $rowData = $context['row_data'] ?? [];
+                    $rowData = $context['row_data'];
                     if ($rowData[2] > $rowData[0]) {
                         return (new StyleBuilder())
                             ->setFontColor(Color::GREEN)

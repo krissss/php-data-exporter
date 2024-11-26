@@ -30,7 +30,7 @@ class NullSpoutExtend implements SpoutExtendInterface
     /**
      * @inheritDoc
      */
-    public function buildCellStyleWithContext($colIndex, int $rowIndex, array $context = []): ?Style
+    public function buildCellStyleWithContext($colIndex, int $rowIndex, array $context): ?Style
     {
         return $this->buildCellStyle($colIndex, $rowIndex);
     }
@@ -38,7 +38,7 @@ class NullSpoutExtend implements SpoutExtendInterface
     /**
      * @inheritDoc
      */
-    public function buildCell($colIndex, int $rowIndex, Cell $cell, array $context = []): Cell
+    public function buildCell($colIndex, int $rowIndex, Cell $cell, array $context): Cell
     {
         return $cell;
     }
@@ -56,7 +56,7 @@ class NullSpoutExtend implements SpoutExtendInterface
     /**
      * @inheritDoc
      */
-    public function buildRowStyleWithContext(int $rowIndex, array $context = []): ?Style
+    public function buildRowStyleWithContext(int $rowIndex, array $context): ?Style
     {
         return $this->buildRowStyle($rowIndex);
     }
@@ -64,7 +64,7 @@ class NullSpoutExtend implements SpoutExtendInterface
     /**
      * @inheritDoc
      */
-    public function buildRow(int $rowIndex, Row $row, array $context = []): Row
+    public function buildRow(int $rowIndex, Row $row, array $context): Row
     {
         return $row;
     }
