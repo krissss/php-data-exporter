@@ -1,5 +1,6 @@
 <?php
 
+use Box\Spout\Common\Entity\Cell;
 use Box\Spout\Common\Entity\Style\Color;
 use Box\Spout\Common\Entity\Style\Style;
 use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
@@ -28,7 +29,7 @@ class RowCellStyleExtend extends NullSpoutExtend
     /**
      * @inheritDoc
      */
-    public function buildCellStyle($colIndex, $rowIndex): ?Style
+    public function buildCellStyle($colIndex, $rowIndex, array $context = []): ?Style
     {
         if ($colIndex === 1 && $rowIndex === 2) {
             return (new StyleBuilder())
@@ -49,7 +50,7 @@ class RowCellStyleExtend extends NullSpoutExtend
     /**
      * @inheritDoc
      */
-    public function buildRowStyle($rowIndex): ?Style
+    public function buildRowStyle($rowIndex, array $context = []): ?Style
     {
         if ($rowIndex === 3) {
             return (new StyleBuilder())
@@ -84,6 +85,86 @@ it("Extension Spout: set cell or row style", function () {
     DataExporter::xlsxSpout($this->source, [
         'showHeaders' => false,
         'extend' => new RowCellStyleExtend(),
+    ])->saveAs($this->filename);
+
+    // check by person
+    expect(true)->toBeTrue();
+});
+
+it("Extension Spout: col index", function () {
+    DataExporter::xlsxSpout([
+        ['aa', 'bb', 'cc'],
+    ], [
+        'showHeaders' => false,
+        'extend' => new class () extends NullSpoutExtend {
+            public function buildCellStyle($colIndex, $rowIndex): ?Style
+            {
+                expect($colIndex)->toBeInt()
+                    ->and($rowIndex)->toBeInt();
+
+                return null;
+            }
+        },
+    ])->saveAs($this->filename);
+
+    DataExporter::xlsxSpout([
+        ['key1' => 'aa', 'key2' => 'bb'],
+    ], [
+        'showHeaders' => false,
+        'extend' => new class () extends NullSpoutExtend {
+            public function buildCellStyle($colIndex, $rowIndex): ?Style
+            {
+                expect($colIndex)->toBeString()
+                    ->and($rowIndex)->toBeInt();
+
+                return null;
+            }
+        },
+    ])->saveAs($this->filename);
+});
+
+it("Extension Spout: change style use context", function () {
+    DataExporter::xlsxSpout([
+        [10, 2, 20, 4],
+        [20, 6, 10, 8],
+    ], [
+        'showHeaders' => false,
+        'extend' => new class () extends NullSpoutExtend {
+            public function buildCellStyleWithContext($colIndex, int $rowIndex, array $context = []): ?Style
+            {
+                if ($colIndex === 0) {
+                    $rowData = $context['row_data'] ?? [];
+                    if ($rowData[2] > $rowData[0]) {
+                        return (new StyleBuilder())
+                            ->setFontColor(Color::GREEN)
+                            ->build();
+                    }
+                }
+
+                return null;
+            }
+        },
+    ])->saveAs($this->filename);
+
+    // check by person
+    expect(true)->toBeTrue();
+});
+
+it("Extension Spout: change cell", function () {
+    DataExporter::xlsxSpout([
+        [10, 2, 20, 4],
+        [20, 6, 10, 8],
+    ], [
+        'showHeaders' => false,
+        'extend' => new class () extends NullSpoutExtend {
+            public function buildCell($colIndex, int $rowIndex, Cell $cell, array $context = []): Cell
+            {
+                if ($colIndex == 0 && $rowIndex == 1) {
+                    $cell->setValue('new value');
+                }
+                return $cell;
+            }
+        },
     ])->saveAs($this->filename);
 
     // check by person

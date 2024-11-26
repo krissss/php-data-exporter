@@ -79,9 +79,24 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
     {
         $cells = [];
         foreach ($data as $index => $cellValue) {
-            $cells[] = WriterEntityFactory::createCell($cellValue, $this->extend->buildCellStyle($index, $this->row));
+            $cellStyle = $this->extend->buildCellStyleWithContext($index, $this->row, [
+                'cell_value' => $cellValue,
+                'row_data' => $data,
+            ]);
+            $cell = WriterEntityFactory::createCell($cellValue, $cellStyle);
+            $cell = $this->extend->buildCell($index, $this->row, $cell, [
+                'row_data' => $data,
+            ]);
+            $cells[] = $cell;
         }
-        $this->writer->addRow(WriterEntityFactory::createRow($cells, $this->extend->buildRowStyle($this->row)));
+        $rowStyle = $this->extend->buildRowStyleWithContext($this->row, [
+            'row_data' => $data,
+        ]);
+        $row = WriterEntityFactory::createRow($cells, $rowStyle);
+        $row = $this->extend->buildRow($this->row, $row, [
+            'row_data' => $data,
+        ]);
+        $this->writer->addRow($row);
     }
 
     public function close()
