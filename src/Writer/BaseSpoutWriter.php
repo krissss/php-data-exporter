@@ -7,6 +7,7 @@ use Kriss\DataExporter\Writer\Extension\SpoutExtendInterface;
 use Kriss\DataExporter\Writer\Traits\ShowHeaderTrait;
 use OpenSpout\Common\Entity\Cell;
 use OpenSpout\Common\Entity\Row;
+use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Writer\WriterInterface;
 use Sonata\Exporter\Writer\TypedWriterInterface;
 
@@ -60,12 +61,44 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
     {
         $cells = [];
         foreach ($data as $index => $cellValue) {
-            $cell = Cell::fromValue($cellValue, $this->extend->buildCellStyle($index, $this->row));
+            $cellStyle = $this->extend->buildCellStyleWithContext($index, $this->row, [
+                'cell_value' => $cellValue,
+                'row_data' => $data,
+            ]);
+            $cell = $this->createCell($cellValue, $cellStyle);
+            $cell = $this->extend->buildCell($index, $this->row, $cell, [
+                'row_data' => $data,
+            ]);
             $cells[] = $cell;
         }
-        $row = new Row($cells, $this->extend->buildRowStyle($this->row));
-
+        $rowStyle = $this->extend->buildRowStyleWithContext($this->row, [
+            'row_data' => $data,
+        ]);
+        $row = $this->createRow($cells, $rowStyle);
+        $row = $this->extend->buildRow($this->row, $row, [
+            'row_data' => $data,
+        ]);
         $this->writer->addRow($row);
+    }
+
+    /**
+     * @param mixed $cellValue
+     * @param Style|null $cellStyle
+     * @return Cell
+     */
+    protected function createCell($cellValue, ?Style $cellStyle): Cell
+    {
+        return Cell::fromValue($cellValue, $cellStyle);
+    }
+
+    /**
+     * @param Cell[] $cells
+     * @param Style|null $rowStyle
+     * @return Row
+     */
+    protected function createRow(array $cells, ?Style $rowStyle): Row
+    {
+        return new Row($cells, $rowStyle);
     }
 
     public function close(): void
