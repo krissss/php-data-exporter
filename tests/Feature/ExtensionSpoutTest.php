@@ -162,6 +162,7 @@ it("Extension Spout: change cell", function () {
                 if ($colIndex == 0 && $rowIndex == 1) {
                     $cell->setValue('new value');
                 }
+
                 return $cell;
             }
         },
