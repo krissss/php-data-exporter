@@ -41,6 +41,7 @@ class TypedExpression
             if ($this->expression instanceof \DateTimeInterface) {
                 return $this->expression->format(DATE_ATOM);
             }
+
             return $this->expression;
         }
         if ($this->type === self::TYPE_EMPTY) {
