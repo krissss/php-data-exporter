@@ -8,7 +8,9 @@ use Iterator;
 use Kriss\DataExporter\Source\ExcelSheetSourceIterator;
 use Kriss\DataExporter\Source\GeneratorChainSourceIterator;
 use Kriss\DataExporter\Traits\ObjectEventsSupportTrait;
+use Kriss\DataExporter\Writer\Expression\TypedExpression;
 use Kriss\DataExporter\Writer\Interfaces\ExcelSheetSupportInterface;
+use Kriss\DataExporter\Writer\Interfaces\TypedExpressionSupportInterface;
 use Sonata\Exporter\Source\ArraySourceIterator;
 use Sonata\Exporter\Writer\WriterInterface;
 
@@ -95,6 +97,7 @@ class Builder
             }
             foreach ($source as $data) {
                 $this->handleEvent(self::EVENT_BEFORE_ECHO_ROW_WRITE, $data, $index, $this);
+                $data = $this->prepareData($this->writer, $data);
                 $this->writer->write($data);
                 $this->handleEvent(self::EVENT_AFTER_ECHO_ROW_WRITE, $data, $index, $this);
                 $index++;
@@ -133,5 +136,24 @@ class Builder
             return;
         }
         yield $source;
+    }
+
+    private function prepareData(WriterInterface $writer, array $data)
+    {
+        if (! $writer instanceof TypedExpressionSupportInterface) {
+            return array_map(function ($value) {
+                // 不支持 TypedExpression 的 writer 直接返回原始数据
+                if ($value instanceof TypedExpression) {
+                    return $value->getRawValue();
+                }
+                if (is_object($value)) {
+                    return (string) $value;
+                }
+
+                return $value;
+            }, $data);
+        }
+
+        return $data;
     }
 }

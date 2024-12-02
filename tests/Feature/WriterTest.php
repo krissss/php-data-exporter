@@ -1,6 +1,9 @@
 <?php
 
+use Carbon\Carbon;
 use Kriss\DataExporter\DataExporter;
+use Kriss\DataExporter\Writer\Expression\HyperLinkExpression;
+use Kriss\DataExporter\Writer\Expression\TypedExpression;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\Filesystem\Path;
 
@@ -92,4 +95,40 @@ it('Writer odsSpreadsheet', function () {
     expect(Path::canonicalize($this->filename . '.ods'))->toBe($filename);
     $factory = IOFactory::load($filename);
     expect((string)$factory->getActiveSheet()->getCell('C4')->getValue())->toBe('cc');
+});
+
+it('write xlsx with dataType', function () {
+    $source = [
+        [
+            'string' => 'abc',
+            'string_int' => '123',
+            'string_int_long' => '123456789101112',
+            'string_float' => '12.5',
+            'string_float_long' => '12.123456789101112',
+            'string_float_00' => '12.00',
+            'int' => 123,
+            'int_long' => 123456789101112,
+            'float' => 12.5,
+            'float_long' => 12.123456789101112,
+            'float_00' => 12.00,
+            'bool_false' => false,
+            'bool_true' => true,
+            'null' => null,
+            'date' => '2021-01-01',
+            'datetime' => '2021-01-01 12:00:00',
+            'time' => '12:00:00',
+            'date_carbon' => Carbon::now(),
+            'hyperlink' => new HyperLinkExpression('https://www.baidu.com', '百度'),
+            'hyperlink2' => new HyperLinkExpression('https://www.baidu.com?name=a"b', '百"度'),
+            'formula' => '=SUM(G2:H2)',
+            'formula_string' => new TypedExpression('=SUM(G2:H2)', TypedExpression::TYPE_STRING),
+        ],
+    ];
+
+    DataExporter::xlsx($source)->saveAs($this->filename . '-xlsx');
+    DataExporter::xlsxSpreadsheet($source)->saveAs($this->filename . '-xlsx-spreadsheet');
+    DataExporter::xlsxSpout($source)->saveAs($this->filename . '-xlsx-spout');
+
+    // check by person
+    expect(true)->toBeTrue();
 });

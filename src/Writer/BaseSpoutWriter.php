@@ -2,6 +2,9 @@
 
 namespace Kriss\DataExporter\Writer;
 
+use Box\Spout\Common\Entity\Cell;
+use Box\Spout\Common\Entity\Row;
+use Box\Spout\Common\Entity\Style\Style;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Box\Spout\Writer\WriterInterface;
 use Box\Spout\Writer\XLSX\Writer as XLSXWriter;
@@ -83,7 +86,7 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
                 'cell_value' => $cellValue,
                 'row_data' => $data,
             ]);
-            $cell = WriterEntityFactory::createCell($cellValue, $cellStyle);
+            $cell = $this->createCell($cellValue, $cellStyle);
             $cell = $this->extend->buildCell($index, $this->row, $cell, [
                 'row_data' => $data,
             ]);
@@ -92,11 +95,31 @@ abstract class BaseSpoutWriter implements TypedWriterInterface
         $rowStyle = $this->extend->buildRowStyleWithContext($this->row, [
             'row_data' => $data,
         ]);
-        $row = WriterEntityFactory::createRow($cells, $rowStyle);
+        $row = $this->createRow($cells, $rowStyle);
         $row = $this->extend->buildRow($this->row, $row, [
             'row_data' => $data,
         ]);
         $this->writer->addRow($row);
+    }
+
+    /**
+     * @param mixed $cellValue
+     * @param Style|null $cellStyle
+     * @return Cell
+     */
+    protected function createCell($cellValue, ?Style $cellStyle): Cell
+    {
+        return WriterEntityFactory::createCell($cellValue, $cellStyle);
+    }
+
+    /**
+     * @param Cell[] $cells
+     * @param Style|null $rowStyle
+     * @return Row
+     */
+    protected function createRow(array $cells, ?Style $rowStyle): Row
+    {
+        return WriterEntityFactory::createRow($cells, $rowStyle);
     }
 
     public function close()
