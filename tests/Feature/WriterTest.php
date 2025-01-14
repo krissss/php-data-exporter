@@ -120,8 +120,9 @@ it('write xlsx with dataType', function () {
             'date_carbon' => Carbon::now(),
             'hyperlink' => new HyperLinkExpression('https://www.baidu.com', '百度'),
             'hyperlink2' => new HyperLinkExpression('https://www.baidu.com?name=a"b', '百"度'),
-            'formula' => '=SUM(G2:H2)',
-            'formula_string' => new TypedExpression('=SUM(G2:H2)', TypedExpression::TYPE_STRING),
+            'formula' => new TypedExpression('=SUM(G2:H2)', TypedExpression::TYPE_FORMULA), // 手动指定公式
+            'formula_string' => '=SUM(G2:H2)', // 不自动识别公式
+            'formula_string2' => '=(WX000', // 不自动识别公式
         ],
     ];
 

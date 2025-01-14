@@ -97,9 +97,10 @@ class TypedExpression
         if (is_int($value) || is_float($value)) {
             return new self($value, self::TYPE_NUMERIC);
         }
-        if (is_string($value) && isset($value[0]) && $value[0] === '=') {
+        // 由于当输入是 '=(xxx' 时，被认为是公式会存在异常，因此不自动解析公式的格式
+        /*if (is_string($value) && isset($value[0]) && $value[0] === '=') {
             return new self($value, self::TYPE_FORMULA);
-        }
+        }*/
         if ($value instanceof \DateTimeInterface) {
             return new self($value, self::TYPE_DATE);
         }
