@@ -32,6 +32,8 @@ use Sonata\Exporter\Writer\XlsxWriter;
  */
 class DataExporter
 {
+    public static $defaultDateTimeFormat = 'Y-m-d H:i:s'; // 默认的时间展示格式
+
     /**
      * @var ContainerContract
      */

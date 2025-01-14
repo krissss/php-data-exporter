@@ -3,6 +3,7 @@
 namespace Kriss\DataExporter\Writer\Expression;
 
 use Box\Spout\Common\Entity\Cell as SpoutDataType;
+use Kriss\DataExporter\DataExporter;
 use PhpOffice\PhpSpreadsheet\Cell\DataType as SpreadsheetDataType;
 
 class TypedExpression
@@ -20,6 +21,10 @@ class TypedExpression
 
     public function __construct($expression, int $type)
     {
+        if ($type === self::TYPE_DATE && $expression instanceof \DateTimeInterface) {
+            $expression = $expression->format(DATE_ATOM); // 按照 ISO 格式转化时间
+        }
+
         $this->expression = $expression;
         $this->type = $type;
     }
@@ -36,13 +41,6 @@ class TypedExpression
         }
         if ($this->type === self::TYPE_BOOLEAN) {
             return (bool)$this->expression;
-        }
-        if ($this->type === self::TYPE_DATE) {
-            if ($this->expression instanceof \DateTimeInterface) {
-                return $this->expression->format(DATE_ATOM);
-            }
-
-            return $this->expression;
         }
         if ($this->type === self::TYPE_EMPTY) {
             return null;
@@ -101,8 +99,9 @@ class TypedExpression
         /*if (is_string($value) && isset($value[0]) && $value[0] === '=') {
             return new self($value, self::TYPE_FORMULA);
         }*/
+        // 将日期按照字符串解析，这样可以正常展示
         if ($value instanceof \DateTimeInterface) {
-            return new self($value, self::TYPE_DATE);
+            return new self($value->format(DataExporter::$defaultDateTimeFormat), self::TYPE_STRING);
         }
 
         return new self($value, self::TYPE_STRING);

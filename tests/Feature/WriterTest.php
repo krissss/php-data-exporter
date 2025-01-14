@@ -114,15 +114,25 @@ it('write xlsx with dataType', function () {
             'bool_false' => false,
             'bool_true' => true,
             'null' => null,
-            'date' => '2021-01-01',
-            'datetime' => '2021-01-01 12:00:00',
-            'time' => '12:00:00',
-            'date_carbon' => Carbon::now(),
+            // 时间
+            'date' => new TypedExpression('2021-01-01', TypedExpression::TYPE_DATE),
+            'datetime' => new TypedExpression('2021-01-01 12:52:18', TypedExpression::TYPE_DATE),
+            'time' => new TypedExpression('12:52:18', TypedExpression::TYPE_DATE),
+            'date_carbon' => new TypedExpression(Carbon::now(), TypedExpression::TYPE_DATE),
+            'date_datetime_obj' => new TypedExpression(new DateTime(), TypedExpression::TYPE_DATE),
+            'date_string' => '2021-01-01', // 不自动识别
+            'datetime_string' => '2021-01-01 12:52:18', // 不自动识别
+            'time_string' => '12:12:52', // 不自动识别
+            'carbon_string' => Carbon::now(), // 会处理成时间字符串
+            'datetime_obj_string' => new DateTime(), // 会处理成时间字符串
+            // 超链接
             'hyperlink' => new HyperLinkExpression('https://www.baidu.com', '百度'),
             'hyperlink2' => new HyperLinkExpression('https://www.baidu.com?name=a"b', '百"度'),
-            'formula' => new TypedExpression('=SUM(G2:H2)', TypedExpression::TYPE_FORMULA), // 手动指定公式
-            'formula_string' => '=SUM(G2:H2)', // 不自动识别公式
-            'formula_string2' => '=(WX000', // 不自动识别公式
+            'hyperlink_string' => 'https://www.baidu.com', // 不自动识别
+            // 公式
+            'formula' => new TypedExpression('=SUM(G2:H2)', TypedExpression::TYPE_FORMULA),
+            'formula_string' => '=SUM(G2:H2)', // 不自动识别
+            'formula_string2' => '=(WX000', // 不自动识别
         ],
     ];
 
@@ -132,4 +142,28 @@ it('write xlsx with dataType', function () {
 
     // check by person
     expect(true)->toBeTrue();
+});
+
+it('change default datetime format', function () {
+    $defaultDateTimeFormat = DataExporter::$defaultDateTimeFormat;
+
+    // 修改默认的时间格式
+    DataExporter::$defaultDateTimeFormat = 'Y/m/d H-i-s';
+
+    $source = [
+        [
+            'carbon_string' => Carbon::now(), // 会处理成时间字符串
+            'datetime_obj_string' => new DateTime(), // 会处理成时间字符串
+        ],
+    ];
+
+    DataExporter::xlsx($source)->saveAs($this->filename . '-xlsx');
+    DataExporter::xlsxSpreadsheet($source)->saveAs($this->filename . '-xlsx-spreadsheet');
+    DataExporter::xlsxSpout($source)->saveAs($this->filename . '-xlsx-spout');
+
+    // check by person
+    expect(true)->toBeTrue();
+
+    // 重置回来，防止影响其他测试用例
+    DataExporter::$defaultDateTimeFormat = $defaultDateTimeFormat;
 });

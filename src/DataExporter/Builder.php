@@ -5,6 +5,7 @@ namespace Kriss\DataExporter\DataExporter;
 use Illuminate\Contracts\Support\Arrayable;
 use InvalidArgumentException;
 use Iterator;
+use Kriss\DataExporter\DataExporter;
 use Kriss\DataExporter\Source\ExcelSheetSourceIterator;
 use Kriss\DataExporter\Source\GeneratorChainSourceIterator;
 use Kriss\DataExporter\Traits\ObjectEventsSupportTrait;
@@ -146,8 +147,9 @@ class Builder
                 if ($value instanceof TypedExpression) {
                     return $value->getRawValue();
                 }
-                if (is_object($value)) {
-                    return (string) $value;
+                // 日期转字符串
+                if ($value instanceof \DateTimeInterface) {
+                    return $value->format(DataExporter::$defaultDateTimeFormat);
                 }
 
                 return $value;

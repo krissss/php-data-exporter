@@ -48,6 +48,12 @@ class XlsxSpoutWriter extends BaseSpoutWriter implements ExcelSheetSupportInterf
     {
         $typed = TypedExpression::fromValue($value);
 
-        return [$typed->getSpoutType(), $typed->getRawValue()];
+        $type = $typed->getSpoutType();
+        $value = $typed->getValue();
+        if ($type === Cell::TYPE_DATE) {
+            $value = new \DateTime($value);
+        }
+
+        return [$type, $value];
     }
 }
