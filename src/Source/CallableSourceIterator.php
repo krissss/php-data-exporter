@@ -28,6 +28,7 @@ class CallableSourceIterator implements SourceIteratorInterface
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->parseCallable()->current();
@@ -36,6 +37,7 @@ class CallableSourceIterator implements SourceIteratorInterface
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->parseCallable()->next();
@@ -44,6 +46,7 @@ class CallableSourceIterator implements SourceIteratorInterface
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->parseCallable()->key();
@@ -52,6 +55,7 @@ class CallableSourceIterator implements SourceIteratorInterface
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->parseCallable()->valid();
@@ -60,6 +64,7 @@ class CallableSourceIterator implements SourceIteratorInterface
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->parseCallable()->rewind();

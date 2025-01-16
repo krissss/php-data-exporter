@@ -22,6 +22,7 @@ class GeneratorChainSourceIterator implements SourceIteratorInterface
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->generator->current();
@@ -30,6 +31,7 @@ class GeneratorChainSourceIterator implements SourceIteratorInterface
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->generator->next();
@@ -38,6 +40,7 @@ class GeneratorChainSourceIterator implements SourceIteratorInterface
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->generator->key();
@@ -46,6 +49,7 @@ class GeneratorChainSourceIterator implements SourceIteratorInterface
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->generator->valid();
@@ -54,6 +58,7 @@ class GeneratorChainSourceIterator implements SourceIteratorInterface
     /**
      * @inheritDoc
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->generator->rewind();
