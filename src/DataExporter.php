@@ -56,7 +56,7 @@ class DataExporter
     public static function clean(): void
     {
         static::$container = null;
-        static::$setContainer = null;
+        self::$setContainer = null;
     }
 
     /**
