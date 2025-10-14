@@ -7,7 +7,8 @@ it('Handler with saveAs', function () {
     $name = __DIR__ . '/../tmp/test';
     $filename = DataExporter::csv([['a']])->saveAs($name);
 
-    expect($filename)->toBe(dirname(__DIR__) . '/tmp/test.csv');
+    expect(file_exists($filename))->toBeTrue()
+        ->and(file_exists($name . '.csv'))->toBeTrue();
 });
 
 it('Handler with browserDownload', function () {
