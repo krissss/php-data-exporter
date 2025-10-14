@@ -27,6 +27,7 @@ it('Dont delete file if exist', function () {
 
     try {
         DontDeleteDataExport::csv([['a']])->saveAs($filename);
+
         throw new \InvalidArgumentException();
     } catch (FileAlreadyExistException $e) {
         expect(true)->toBeTrue();
@@ -50,6 +51,7 @@ it('Dont delete file if exist use setContainer', function () {
 
     try {
         DataExporter::csv([['a']])->saveAs($filename);
+
         throw new \InvalidArgumentException();
     } catch (FileAlreadyExistException $e) {
         expect(true)->toBeTrue();
