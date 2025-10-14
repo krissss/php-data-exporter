@@ -244,6 +244,7 @@ it("Extension Spout: change cell", function () {
                 if ($colIndex == 0 && $rowIndex == 1) {
                     return Cell::fromValue('new value');
                 }
+
                 return $cell;
             }
         },
