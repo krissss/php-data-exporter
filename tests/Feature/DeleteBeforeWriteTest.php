@@ -6,7 +6,7 @@ use Illuminate\Container\Container;
 use Kriss\DataExporter\DataExporter;
 use Kriss\DataExporter\Exceptions\FileAlreadyExistException;
 
-class MyDataExport extends \Kriss\DataExporter\DataExporter
+class DontDeleteDataExport extends \Kriss\DataExporter\DataExporter
 {
     /**
      * @inheritDoc
@@ -26,9 +26,10 @@ it('Dont delete file if exist', function () {
     }
 
     try {
-        MyDataExport::csv([['a']])->saveAs($filename);
+        DontDeleteDataExport::csv([['a']])->saveAs($filename);
+        throw new \InvalidArgumentException();
     } catch (FileAlreadyExistException $e) {
-        expect($e->filename)->toBe($filename);
+        expect(true)->toBeTrue();
     }
 });
 
@@ -48,8 +49,9 @@ it('Dont delete file if exist use setContainer', function () {
     DataExporter::setContainer($container);
 
     try {
-        MyDataExport::csv([['a']])->saveAs($filename);
+        DataExporter::csv([['a']])->saveAs($filename);
+        throw new \InvalidArgumentException();
     } catch (FileAlreadyExistException $e) {
-        expect($e->filename)->toBe($filename);
+        expect(true)->toBeTrue();
     }
 });

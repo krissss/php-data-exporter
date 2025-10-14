@@ -5,7 +5,7 @@ use Kriss\DataExporter\Writer\Extension\NullSpreadsheetExtend;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\IWriter;
 
-class MyExtend extends NullSpreadsheetExtend
+class ExtensionSpreadsheetMyExtend extends NullSpreadsheetExtend
 {
     /**
      * @inheritDoc
@@ -37,7 +37,7 @@ beforeEach(function () {
 
 it("Extension Spreadsheet: set style", function () {
     DataExporter::xlsxSpreadsheet($this->source, [
-        'extend' => new MyExtend(),
+        'extend' => new ExtensionSpreadsheetMyExtend(),
     ])->saveAs($this->filename);
 
     // check by person

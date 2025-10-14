@@ -53,6 +53,12 @@ class DataExporter
         ]);
     }
 
+    public static function clean(): void
+    {
+        static::$container = null;
+        static::$setContainer = null;
+    }
+
     /**
      * @return ContainerContract
      */

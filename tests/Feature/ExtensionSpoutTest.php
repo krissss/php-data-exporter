@@ -8,7 +8,7 @@ use Box\Spout\Writer\WriterInterface;
 use Kriss\DataExporter\DataExporter;
 use Kriss\DataExporter\Writer\Extension\NullSpoutExtend;
 
-class DefaultStyleExtend extends NullSpoutExtend
+class ExtensionSpoutDefaultStyleExtend extends NullSpoutExtend
 {
     /**
      * @inheritDoc
@@ -24,7 +24,7 @@ class DefaultStyleExtend extends NullSpoutExtend
     }
 }
 
-class RowCellStyleExtend extends NullSpoutExtend
+class ExtensionSpoutRowCellStyleExtend extends NullSpoutExtend
 {
     /**
      * @inheritDoc
@@ -74,7 +74,7 @@ beforeEach(function () {
 
 it("Extension Spout: set default style", function () {
     DataExporter::xlsxSpout($this->source, [
-        'extend' => new DefaultStyleExtend(),
+        'extend' => new ExtensionSpoutDefaultStyleExtend(),
     ])->saveAs($this->filename);
 
     // check by person
@@ -84,7 +84,7 @@ it("Extension Spout: set default style", function () {
 it("Extension Spout: set cell or row style", function () {
     DataExporter::xlsxSpout($this->source, [
         'showHeaders' => false,
-        'extend' => new RowCellStyleExtend(),
+        'extend' => new ExtensionSpoutRowCellStyleExtend(),
     ])->saveAs($this->filename);
 
     // check by person

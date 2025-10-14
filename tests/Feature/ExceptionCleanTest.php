@@ -12,7 +12,7 @@ it('Clean file if exception', function () {
     ];
     $builder = DataExporter::csv($source)
         ->withEvents([
-            DataExporter\Builder::EVENT_AFTER_ECHO_ROW_WRITE => function ($data, $index) {
+            DataExporter\Builder::EVENT_AFTER_EACH_ROW_WRITE => function ($data, $index) {
                 if ($index === 3) {
                     throw new Exception('Error');
                 }

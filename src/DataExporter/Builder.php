@@ -21,8 +21,17 @@ class Builder
 
     public const EVENT_AFTER_OPEN = 'afterOpen';
     public const EVENT_BEFORE_CLOSE = 'beforeClose';
-    public const EVENT_BEFORE_ECHO_ROW_WRITE = 'beforeEchoRowWrite';
-    public const EVENT_AFTER_ECHO_ROW_WRITE = 'afterEchoRowWrite';
+    public const EVENT_BEFORE_EACH_ROW_WRITE = 'beforeEchoRowWrite';
+    public const EVENT_AFTER_EACH_ROW_WRITE = 'afterEachRowWrite';
+
+    /**
+     * @deprecated replace with EVENT_BEFORE_ECHO_ROW_WRITE
+     */
+    public const EVENT_BEFORE_ECHO_ROW_WRITE = self::EVENT_BEFORE_EACH_ROW_WRITE;
+    /**
+     * @deprecated replace with EVENT_AFTER_ECHO_ROW_WRITE
+     */
+    public const EVENT_AFTER_ECHO_ROW_WRITE = self::EVENT_AFTER_EACH_ROW_WRITE;
 
     /**
      * @var WriterInterface
@@ -97,10 +106,10 @@ class Builder
                 $lastSheet = $key; // 相同 sheet 名不重复设置
             }
             foreach ($source as $data) {
-                $this->handleEvent(self::EVENT_BEFORE_ECHO_ROW_WRITE, $data, $index, $this);
+                $this->handleEvent(self::EVENT_BEFORE_EACH_ROW_WRITE, $data, $index, $this);
                 $data = $this->prepareData($this->writer, $data);
                 $this->writer->write($data);
-                $this->handleEvent(self::EVENT_AFTER_ECHO_ROW_WRITE, $data, $index, $this);
+                $this->handleEvent(self::EVENT_AFTER_EACH_ROW_WRITE, $data, $index, $this);
                 $index++;
             }
         }

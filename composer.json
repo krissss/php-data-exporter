@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
-        "kriss/spout": "v3.3.0.6",
+        "kriss/spout": ">=3.3.0.6",
         "pestphp/pest": "^1.20",
         "phpoffice/phpspreadsheet": "^1.22"
     },
