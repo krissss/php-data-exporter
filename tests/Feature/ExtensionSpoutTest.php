@@ -10,7 +10,7 @@ use OpenSpout\Writer\WriterInterface;
 /**
  * 配置 csv
  */
-class ConfigCsvExtend extends NullSpoutExtend
+class ExtensionSpoutConfigCsvExtend extends NullSpoutExtend
 {
     /**
      * @inheritDoc
@@ -28,7 +28,7 @@ class ConfigCsvExtend extends NullSpoutExtend
 /**
  * 默认样式
  */
-class DefaultStyleExtend extends NullSpoutExtend
+class ExtensionSpoutDefaultStyleExtend extends NullSpoutExtend
 {
     /**
      * @inheritDoc
@@ -50,7 +50,7 @@ class DefaultStyleExtend extends NullSpoutExtend
 /**
  * 行和列的样式
  */
-class RowCellStyleExtend extends NullSpoutExtend
+class ExtensionSpoutRowCellStyleExtend extends NullSpoutExtend
 {
     /**
      * @inheritDoc
@@ -134,7 +134,7 @@ beforeEach(function () {
 it("Extension Spout: config csv", function () {
     $filename = DataExporter::csvSpout($this->source, [
         'showHeaders' => false,
-        'extend' => new ConfigCsvExtend(),
+        'extend' => new ExtensionSpoutConfigCsvExtend(),
     ])->saveAs($this->filename);
 
     $options = new \OpenSpout\Reader\CSV\Options();
@@ -156,7 +156,7 @@ it("Extension Spout: config csv", function () {
 
 it("Extension Spout: set default style", function () {
     DataExporter::xlsxSpout($this->source, [
-        'extend' => new DefaultStyleExtend(),
+        'extend' => new ExtensionSpoutDefaultStyleExtend(),
     ])->saveAs($this->filename);
 
     // check by person
@@ -166,7 +166,7 @@ it("Extension Spout: set default style", function () {
 it("Extension Spout: set cell or row style", function () {
     DataExporter::xlsxSpout($this->source, [
         'showHeaders' => false,
-        'extend' => new RowCellStyleExtend(),
+        'extend' => new ExtensionSpoutRowCellStyleExtend(),
     ])->saveAs($this->filename);
 
     // check by person

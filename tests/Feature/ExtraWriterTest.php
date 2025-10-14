@@ -8,12 +8,12 @@ use Sonata\Exporter\Writer\JsonWriter;
 /**
  * @method static Handler json($source, array $options = [])
  */
-class MyDataExport extends \Kriss\DataExporter\DataExporter
+class ExtraWriterDataExport extends \Kriss\DataExporter\DataExporter
 {
     /**
      * @inheritDoc
      */
-    protected static function writerConfig(): array
+    public static function writerConfig(): array
     {
         return array_merge(parent::writerConfig(), [
             'json' => [
@@ -25,12 +25,12 @@ class MyDataExport extends \Kriss\DataExporter\DataExporter
     }
 }
 
-it('Dont delete file if exist', function () {
+it('export json', function () {
     $source = [
         ['aaa', 'bbb'],
         ['xxx', 'yyy'],
     ];
-    $filename = MyDataExport::json($source)->saveAs(__DIR__ . '/../tmp/test');
+    $filename = ExtraWriterDataExport::json($source)->saveAs(__DIR__ . '/../tmp/ExtraWriter_json');
 
     expect(file_get_contents($filename))->toBe(json_encode($source));
 });
