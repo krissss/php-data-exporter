@@ -70,7 +70,7 @@ class DataExporter
         return $container;
     }
 
-    private static $setContainer = null;
+    protected static $setContainer = null;
 
     public static function setContainer(ContainerContract $container)
     {
